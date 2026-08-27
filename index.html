@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%23071d3b%27/%3E%3Cpath d=%27M10 50h12V32H10zm16 0h12V20H26zm16 0h12V8H42z%27 fill=%27%231bb1bf%27/%3E%3C/svg%3E">
 <title>台灣 AIDC 選址建議與桃園 40MW 個案開發決策平台｜進能服 6692</title>
-<meta name="description" content="AIDC 選址建議與桃園 40MW 實戰個案開發決策平台：涵蓋台灣併網硬約束、土地分區、800Vdc 原生電力架構、電信中立低延遲拓撲與 15 年 NNN 包租商業條款。">
+<meta name="description" content="AIDC 選址建議與桃園 40MW 實戰個案開發決策平台：涵蓋台灣併網硬約束、土地分區、480Vac-to-800Vdc 集中整流電力架構、電信中立低延遲拓撲、壽險資管融資結構與 15 年 NNN 包租商業條款。">
 <style>
 :root{
   --blue:#1968AD; --blue-d:#12518A; --blue-dd:#0C3A63; --blue-soft:#E8F1F9;
@@ -15,6 +15,7 @@
   --coral:#D95F45; --coral-soft:#FBEAE5;
   --grey:#9FB1C0; --grey-soft:#EDF1F5;
   --green:#2E7D32; --green-soft:#E8F5E9;
+  --purple:#6B46C1; --purple-soft:#F3E8FF;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -37,13 +38,13 @@ body{
 .topnav{display:flex; gap:4px; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none}
 .topnav::-webkit-scrollbar{display:none}
 .topnav a{
-  text-decoration:none; color:var(--muted); font-size:.85rem; font-weight:600;
-  padding:6px 14px; border-radius:4px; white-space:nowrap; border:1px solid transparent;
+  text-decoration:none; color:var(--muted); font-size:.84rem; font-weight:600;
+  padding:6px 13px; border-radius:4px; white-space:nowrap; border:1px solid transparent;
   transition:all .15s ease;
 }
 .topnav a:hover{color:var(--blue); background:var(--blue-soft)}
 .topnav a.active{color:#fff; background:var(--blue); font-weight:700}
-.topbar .meta{font-size:.75rem; color:var(--muted); white-space:nowrap; font-weight:600}
+.topbar .meta{font-size:.74rem; color:var(--muted); white-space:nowrap; font-weight:600}
 @media(max-width:1120px){.topbar .meta{display:none}}
 @media(max-width:860px){.topbar .brand .tx{font-size:.78rem}}
 
@@ -70,6 +71,7 @@ body{
 .flag.amber{background:var(--amber-soft); color:#9a6a10}
 .flag.coral{background:var(--coral-soft); color:#b4432c}
 .flag.green{background:var(--green-soft); color:var(--green)}
+.flag.purple{background:var(--purple-soft); color:var(--purple)}
 .flag.grey{background:var(--grey-soft); color:var(--muted)}
 .slide-body{flex:1; display:flex; flex-direction:column; gap:16px}
 .slide-foot{display:flex; justify-content:space-between; gap:16px; margin-top:20px; padding-top:12px; border-top:1px solid var(--line); font-size:.73rem; color:var(--muted); background:rgba(255,255,255,.6); border-radius:3px; padding-left:8px; padding-right:8px}
@@ -96,6 +98,7 @@ body{
 .card.amber{border-top-color:var(--amber)}
 .card.coral{border-top-color:var(--coral)}
 .card.green{border-top-color:var(--green)}
+.card.purple{border-top-color:var(--purple)}
 .card.grey{border-top-color:var(--grey)}
 .card h3{font-size:.98rem; font-weight:800; margin-bottom:8px; color:var(--ink)}
 .card p{font-size:.88rem; color:var(--muted); line-height:1.55}
@@ -107,6 +110,7 @@ body{
 .metric.amber{border-left-color:var(--amber)} .metric.amber .k{color:#9a6a10}
 .metric.coral{border-left-color:var(--coral)} .metric.coral .k{color:#b4432c}
 .metric.green{border-left-color:var(--green)} .metric.green .k{color:var(--green)}
+.metric.purple{border-left-color:var(--purple)} .metric.purple .k{color:var(--purple)}
 .metric.grey{border-left-color:var(--grey)} .metric.grey .k{color:var(--muted)}
 
 .big-callout{
@@ -143,6 +147,7 @@ td.ctr,th.ctr{text-align:center}
 .chip.amber{background:var(--amber-soft); color:#9a6a10}
 .chip.coral{background:var(--coral-soft); color:#b4432c}
 .chip.green{background:var(--green-soft); color:var(--green)}
+.chip.purple{background:var(--purple-soft); color:var(--purple)}
 .chip.grey{background:var(--grey-soft); color:var(--muted)}
 
 .note{background:var(--amber-soft); border-left:4px solid var(--amber); padding:10px 14px; font-size:.86rem; border-radius:0 3px 3px 0}
@@ -231,7 +236,7 @@ svg text{font-family:inherit}
     <a href="#home" data-nav="home">封面</a>
     <a href="#p1" data-nav="p1">Part 1 選址建議 (5 頁)</a>
     <a href="#p2" data-nav="p2">Part 2 桃園個案背景 (5 頁)</a>
-    <a href="#p3" data-nav="p3">Part 3 決策與里程碑 (1 頁)</a>
+    <a href="#p3" data-nav="p3">Part 3 商模、資金與里程碑 (3 頁)</a>
   </nav>
   <div class="meta">基準：2026/08 ｜ 呈閱：董事長、總經理</div>
 </div>
@@ -260,14 +265,14 @@ svg text{font-family:inherit}
       <div class="kicker">進能服 6692 · AIDC 場域經濟實戰庫</div>
       <h1>算力的瓶頸在電，落地的勝負在選址與架構</h1>
       <p class="lede">
-        本決策資料庫完整解構台灣 AIDC 開發全流程：從台電 161kV 輸電硬約束、土地分區與水保規範，到桃園蘆竹 40MW 實戰個案——包含 4 層鋼構立體化剖面、Vertiv 800Vdc 原生直降機電、淡水/台北/竹科 Sub-1ms 電信樞紐，以及 15 年 NNN 包租 LOI 商業閉環。
+        本決策資料庫完整解構台灣 AIDC 開發全流程：從台電 161kV 輸電硬約束、大潭/協和 2 公里選址法則、4,321 坪丁工地籍分區，到 480Vac→800Vdc 集中整流電力架構、淡水/台北/竹科 Sub-1ms 電信樞紐，以及壽險資管對接與 15 年 NNN 包租商業閉環。
       </p>
       <div class="herometa">
         <span>台電 161kV 專用進線</span>
         <span>4,321 坪丁種建地 ＋ 4,657 坪水保滯洪</span>
-        <span>Vertiv 800Vdc 原生 Vera Rubin Ready</span>
-        <span>350 Racks NVL72/144</span>
-        <span>15 年 NNN 包租 LOI</span>
+        <span>480Vac→800Vdc 集中整流 (巴拿馬方案)</span>
+        <span>350 Racks NVL72/144 Ready</span>
+        <span>壽險資管長租 ＋ 15 年 NNN</span>
         <span>設計 PUE &lt; 1.15</span>
       </div>
     </div>
@@ -279,7 +284,7 @@ svg text{font-family:inherit}
         <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><rect x="1" y="1" width="12" height="12" rx="2" fill="#1968AD" opacity=".2"/><rect x="17" y="1" width="12" height="12" rx="2" fill="#1968AD" opacity=".45"/><rect x="1" y="17" width="12" height="12" rx="2" fill="#1968AD" opacity=".45"/><rect x="17" y="17" width="12" height="12" rx="2" fill="#1968AD"/></svg>
         <div class="pc-eyebrow">PART 1</div>
         <h2>AIDC 選址建議</h2>
-        <p>「有電的地」比「有地」更稀缺。解析台灣併網硬約束、名義申請作廢率 70%、土地與水保配比、Sub-1ms 電信拓撲與 30 分鐘初評查核清單。</p>
+        <p>「有電的地」比「有地」更稀缺。解析台灣併網硬約束、名義申請作廢率 70%、大潭/協和 2 公里法則、Sub-1ms 電信拓撲與 30 分鐘初評查核清單。</p>
         <div class="pc-flags"><span class="chip blue">5 頁</span><span class="chip teal">評估漏斗</span><span class="chip coral">Go / Hold / Stop</span></div>
         <div class="pc-go">進入選址章節 &rarr;</div>
       </a>
@@ -288,18 +293,18 @@ svg text{font-family:inherit}
         <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><path d="M4 26 L4 17 L10 17 L10 26 M12 26 L12 11 L18 11 L18 26 M20 26 L20 4 L26 4 L26 26" stroke="#1BB1BF" stroke-width="2.4" fill="none"/></svg>
         <div class="pc-eyebrow">PART 2</div>
         <h2>個案背景：桃園 40MW 實戰開發</h2>
-        <p>以 6.X.1.6 實體案場圖資為基礎：4,321 坪丁工總圖、4 層鋼構建築剖面、161kV 直降 Vertiv 800Vdc 電力、電信中立樞紐與 15 年 NNN 包租 LOI 條款。</p>
-        <div class="pc-flags"><span class="chip teal">5 頁</span><span class="chip blue">800Vdc 原生</span><span class="chip amber">15 年 NNN 包租</span></div>
+        <p>以 6.X.1.6 實體案場圖資為基礎：4,321 坪丁工總圖、4 層鋼構建築剖面、480Vac→800Vdc 集中整流電力、電信中立樞紐與 15 年 NNN 包租 LOI 條款。</p>
+        <div class="pc-flags"><span class="chip teal">5 頁</span><span class="chip blue">800Vdc 母排</span><span class="chip amber">15 年 NNN 包租</span></div>
         <div class="pc-go">進入個案章節 &rarr;</div>
       </a>
 
       <a class="part-card c3" href="#p3-1">
         <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><path d="M15 3l6 6-6 6-6-6z" fill="#E09A2B" opacity=".5"/><path d="M15 15l6 6-6 6-6-6z" fill="#E09A2B"/></svg>
         <div class="pc-eyebrow">PART 3</div>
-        <h2>決策矩陣與專案里程碑</h2>
-        <p>2026~2027 RFS 開發甘特圖、投資人三道交付閘門（資產可交付、收入可融資、權責可治理）與專案推進路線圖。</p>
-        <div class="pc-flags"><span class="chip amber">1 頁</span><span class="chip coral">Gate 1~3 閉環</span><span class="chip grey">2027 Q3/Q4 RFS</span></div>
-        <div class="pc-go">進入決策章節 &rarr;</div>
+        <h2>商模、資金與里程碑</h2>
+        <p>三類營運模式比較與退出策略、壽險資管資金對接（富邦/國泰）、2026~2027 RFS 甘特圖、9 月美商 Colo 拓展與 Gate 1~3 交付閉環。</p>
+        <div class="pc-flags"><span class="chip amber">3 頁</span><span class="chip purple">壽險長租資管</span><span class="chip coral">Gate 1~3 閉環</span></div>
+        <div class="pc-go">進入商模與里程碑 &rarr;</div>
       </a>
     </div>
 
@@ -311,7 +316,7 @@ svg text{font-family:inherit}
       </div>
       <div class="metric teal">
         <div class="k">800 Vdc</div>
-        <div class="t">原生直流頂部匯流排（直插 NVIDIA Vera Rubin）</div>
+        <div class="t">480Vac→800Vdc 集中整流（巴拿馬成熟方案，支援 Vera Rubin）</div>
       </div>
       <div class="metric amber">
         <div class="k">4,321 坪</div>
@@ -324,6 +329,10 @@ svg text{font-family:inherit}
       <div class="metric coral">
         <div class="k">15 年 NNN</div>
         <div class="t">不可撤銷淨包租合約（USD 180~210 / kW / Mo）</div>
+      </div>
+      <div class="metric purple">
+        <div class="k">壽險資管</div>
+        <div class="t">長租承接黑灰區，自有資金壓至 5~10%</div>
       </div>
     </div>
 
@@ -431,12 +440,12 @@ svg text{font-family:inherit}
     <div class="slide-header">
       <div>
         <div class="eyebrow">Part 1 · 選址建議 1.2</div>
-        <h1>併網硬約束與核供決策閘門：杜絕名義容量陷阱</h1>
-        <p class="sub">台電累積 79 件、4,758MW 的輸電級申請，逾 7 成因逾期未正式送件而作廢。評估市場規模應以「已送電與施工中」的約 870.5MW 為真實作業量級，非 3GW 名義核准。</p>
+        <h1>併網硬約束與 2 公里法則：杜絕名義容量陷阱</h1>
+        <p class="sub">台電累積 79 件、4,758MW 的輸電級申請，逾 7 成因逾期未正式送件而作廢。Colo 客戶端明確要求案場須落在大潭/協和電廠 2 公里半徑內且符合豁免條件，實體在運與興建中僅約 870.5MW。</p>
       </div>
       <div class="flags">
         <span class="flag coral">選址第一道門</span>
-        <span class="flag blue">台電核供函唯一性</span>
+        <span class="flag blue">2 公里電廠法則</span>
       </div>
     </div>
     <div class="slide-body">
@@ -461,8 +470,8 @@ svg text{font-family:inherit}
             <text x="600" y="98" font-size="12" fill="#5B7285">取得「同意核供函」正本</text>
 
             <rect x="740" y="40" width="200" height="85" rx="6" fill="#FBEAE5" stroke="#D95F45" stroke-width="2"/>
-            <text x="840" y="74" font-size="15" font-weight="800" fill="#12293D">④ 北部 5MW+ 限制</text>
-            <text x="840" y="98" font-size="12" fill="#5B7285">電源點距離與自備電廠條件</text>
+            <text x="840" y="74" font-size="15" font-weight="800" fill="#12293D">④ 大潭/協和 2km 法則</text>
+            <text x="840" y="98" font-size="12" fill="#5B7285">北部 5MW+ 豁免電源點距離</text>
 
             <rect x="980" y="40" width="180" height="85" rx="6" fill="#0C3A63"/>
             <text x="1070" y="74" font-size="15" font-weight="800" fill="#fff">⑤ 能源使用說明書</text>
@@ -523,19 +532,18 @@ svg text{font-family:inherit}
         </div>
 
         <div class="card coral">
-          <h3>🚨 投資人警示：杜絕名義數字灌水</h3>
+          <h3>🚨 實戰選址準則：2 公里法則與地震排除</h3>
           <p>
-            市場簡報若直接引用「全台核准 3GW」，會嚴重誤導算力供需預期。
-            <b>真實已在運與興建中的量級僅約 870.5MW</b>。
+            <b>Colo 客戶端標準要求：</b>北部選址須落在大潭電廠或協和電廠約 2 公里半徑內，方符合北部 5MW+ 豁免政策。
           </p>
           <div class="warn" style="margin-top:10px">
-            <b>北部解禁真相：</b>經濟部北部 5MW+ 限制並非全面放開，僅限大潭、協和電廠約 2 公里半徑內且符合特定附帶條件，其餘區域仍嚴格管制。
+            <b>海纜出口區位判讀：</b>全台適合建 AIDC 之海纜出口為淡水、基隆與宜蘭頭城；但<b>宜蘭（東部）因地震頻率與地質風險被國際 Colo 直接排除</b>，桃園蘆竹正好承接淡水海纜與大潭電源的核心走廊。
           </div>
         </div>
       </div>
     </div>
     <div class="slide-foot">
-      <div>來源：台電輸電級資料中心併網申請統計 ｜ 進能服 AIDC 知識庫整理</div>
+      <div>來源：台電輸電級資料中心併網申請統計 ｜ Colo 客戶選址準則分析</div>
       <div class="pageno">1.2</div>
     </div>
   </section>
@@ -913,7 +921,7 @@ svg text{font-family:inherit}
       <div>
         <div class="eyebrow">Part 2 · 個案背景 2.2</div>
         <h1>4 層鋼構建築剖面：白區灰區垂直分離設計</h1>
-        <p class="sub">樓高 6.5 米、樓板承重 2.5 噸/m²。頂樓配置 Vertiv 乾冷器、2F~4F 容納 350 機櫃原生 800Vdc 白區、1F 集中整流與中壓配電灰區、戶外佈置 161kV 變電所與 BESS 儲能。</p>
+        <p class="sub">樓高 6.5 米、樓板承重 2.5 噸/m²。頂樓配置 Vertiv 乾冷器、2F~4F 容納 350 機櫃 800Vdc 直流母排白區、1F 集中整流與中壓配電灰區、戶外佈置 161kV 變電所與 BESS 儲能。</p>
       </div>
       <div class="flags">
         <span class="flag teal">樓板承重 2.5 T/m²</span>
@@ -958,13 +966,13 @@ svg text{font-family:inherit}
               <tr class="hl-row">
                 <td><b>2F 白區 (IT Hall)</b></td>
                 <td>淨高 6.5m ｜ 承重 2.5 T/m²</td>
-                <td><b>Native 800Vdc Busway Ready</b> 頂部匯流排直插機櫃</td>
-                <td>原生 800V 直流隨插即用，零機房改造成本直上 Vera Rubin</td>
+                <td><b>800Vdc Overhead Busway Ready</b> 頂部匯流排直插機櫃</td>
+                <td>800V 直流母排隨插即用，機電架構全面預留直上 Vera Rubin</td>
               </tr>
               <tr>
                 <td><b>1F 灰區 (Gray Space)</b></td>
                 <td>淨高 7.0m ｜ 承重 3.0 T/m²</td>
-                <td>480Vac 中壓開關櫃、<b>Vertiv 800Vdc 集中整流器</b>、一次側水泵房、MMR</td>
+                <td>480Vac 中壓開關櫃、<b>Vertiv 480V→800Vdc 集中整流器</b>、一次側水泵房、MMR</td>
                 <td>整流熱源 100% 集中於灰區處理，白區淨空間利用率最大化</td>
               </tr>
               <tr>
@@ -1008,12 +1016,13 @@ svg text{font-family:inherit}
     <div class="slide-header">
       <div>
         <div class="eyebrow">Part 2 · 個案背景 2.3</div>
-        <h1>161kV 直降與 Vertiv 800Vdc 原生電力架構</h1>
-        <p class="sub">顛覆傳統 48Vdc 架構！1F 集中整流轉換效率 &gt; 97.5%，工作電流自 3,750A 驟降至 225A（減降 94%），母排減銅 50%，原生直上 NVIDIA Vera Rubin NVL72/144。</p>
+        <h1>480Vac→800Vdc 集中整流架構與 Vera Rubin Ready 路徑</h1>
+        <p class="sub">採用阿里巴巴「巴拿馬電源」成熟集中整流方案：1F 集中整流效率 &gt; 97.5%，工作電流自 3,750A 驟降至 225A（減降 94%），母排減銅 50%，以成熟低成本供應鏈保障 2027 落地，並預留未來 SSP 直流升級路徑。</p>
       </div>
       <div class="flags">
+        <span class="flag teal">巴拿馬成熟方案</span>
         <span class="flag coral">電流劇降 94%</span>
-        <span class="flag teal">Vera Rubin Day-1 Ready</span>
+        <span class="flag blue">Vera Rubin Ready</span>
       </div>
     </div>
     <div class="slide-body">
@@ -1028,8 +1037,8 @@ svg text{font-family:inherit}
               <tr>
                 <th>技術指標</th>
                 <th>傳統 48Vdc 分散整流架構</th>
-                <th>Vertiv 800Vdc 集中整流架構 (桃園案)</th>
-                <th>差異效益與競爭優勢</th>
+                <th>480Vac→800Vdc 集中整流架構 (桃園案)</th>
+                <th>差異效益與戰術判斷</th>
               </tr>
             </thead>
             <tbody>
@@ -1058,10 +1067,10 @@ svg text{font-family:inherit}
                 <td>白區零 PSU 熱源，助攻 <b>PUE &lt; 1.15</b></td>
               </tr>
               <tr class="hl-row">
-                <td><b>NVIDIA Vera Rubin 支援</b></td>
-                <td>需大規模二次機電改裝、停機升級</td>
-                <td><b>Day 1 原生隨插即用</b> (Plug & Play)</td>
-                <td><b>零機房改造成本</b>，精準對齊 2027 出貨潮</td>
+                <td><b>供應鏈與商轉時程</b></td>
+                <td>新世代 SSP 預計 2028-29 才成熟且昂貴</td>
+                <td><b>Phase 1 採巴拿馬成熟整流，Phase 2 預留 SSP</b></td>
+                <td><b>成熟供應鏈成本更低</b>，精準卡位 2027 出貨潮</td>
               </tr>
             </tbody>
           </table>
@@ -1071,20 +1080,20 @@ svg text{font-family:inherit}
       <div class="three-col" style="margin-top:6px">
         <div class="card">
           <h3>⚡ 161kV → 480Vac → 800Vdc</h3>
-          <p>台電 161kV 專線進線，經戶外變電站降壓為 480Vac，再於 1F 經 Vertiv 集中整流器高效率轉換為 800Vdc 直流電。</p>
+          <p>台電 161kV 專線進線，經戶外變電站降壓為 480Vac，再於 1F 經集中整流器高效率轉換為 800Vdc 直流電。</p>
         </div>
         <div class="card teal">
           <h3>🔌 2F~4F 頂部匯流排隨插即用</h3>
           <p>每櫃配置 180kW @ 225A Tap-off Box，由天花板頂部直接垂降接入 Vera Rubin 機櫃，隨插即用、部署極速。</p>
         </div>
-        <div class="card coral">
-          <h3>🏆 Off-taker 核心戰略價值</h3>
-          <p>客戶進駐時無需自行採購昂貴整流機櫃或改建電力管線，節省 6~12 個月改裝工期，顯著提升租賃意願。</p>
+        <div class="card amber">
+          <h3>🛠️ 戰術判斷：先成熟、再演進</h3>
+          <p>不糾結未量產之完美新技術，採行之多年的巴拿馬成熟方案快速落地，既保證 2027 交付，又對齊 CSP 電源團隊審查。</p>
         </div>
       </div>
     </div>
     <div class="slide-foot">
-      <div>來源：Vertiv 800Vdc 電力架構規格 ｜ NVIDIA Vera Rubin NVL72/NVL144 白皮書（6.X.1.6 實戰圖資）</div>
+      <div>來源：Vertiv 800Vdc 電力架構規格 ｜ 巴拿馬電源架構 ｜ NVIDIA Vera Rubin 規格手冊</div>
       <div class="pageno">2.3</div>
     </div>
   </section>
@@ -1165,7 +1174,7 @@ svg text{font-family:inherit}
         </div>
         <div class="card amber">
           <h3>🌐 100% 電信中立開放</h3>
-          <p>租戶可依自身跨國合約自由挑選中華電信、台灣大、遠傳或國際運營商，無單一電信商綁定溢價風險。</p>
+          <p>租戶可依自身跨國合約自由挑選中華電信、台灣大、遠傳或國際運營商，具備算力出海談判反制槓桿。</p>
         </div>
       </div>
     </div>
@@ -1208,8 +1217,8 @@ svg text{font-family:inherit}
               <tr class="hl-row">
                 <td><b>意向容量 (Reserved Capacity)</b></td>
                 <td><b>20 MW ~ 40 MW IT Capacity</b></td>
-                <td>Colo 批發型 (Wholesale) 整棟或分期包租</td>
-                <td>鎖定國際大型 CSP、Colo 運營商或電信大廠</td>
+                <td>Colo 批發型 (Wholesale) 整棟或分期 (10MW×4) 包租</td>
+                <td>鎖定國際大型 CSP、Colo 運營商或美商算力買家</td>
               </tr>
               <tr class="good-row">
                 <td><b>承租模式與年限 (Lease Terms)</b></td>
@@ -1225,7 +1234,7 @@ svg text{font-family:inherit}
               </tr>
               <tr>
                 <td><b>電力規格 (Power SLA)</b></td>
-                <td>台電 161kV 特高壓進線 ＋ Vertiv 800Vdc</td>
+                <td>台電 161kV 特高壓進線 ＋ 800Vdc 集中整流</td>
                 <td>40MW IT 專用容量保證 ＋ BESS 儲能微電網備援</td>
                 <td>提供 99.999% 五個九的高可用性電力品質保證</td>
               </tr>
@@ -1267,20 +1276,211 @@ svg text{font-family:inherit}
 
 </div>
 
-<!-- ================= PART 3: 決策與里程碑 ================= -->
+<!-- ================= PART 3: 商模、資金與里程碑 ================= -->
 <div class="view" id="view-p3">
 
   <!-- P3.1 -->
   <section class="slide">
     <div class="slide-header">
       <div>
-        <div class="eyebrow">Part 3 · 決策矩陣 3.1</div>
-        <h1>專案開發里程碑與投資人三道交付閘門</h1>
-        <p class="sub">自 2026 Q3 啟動至 2027 Q4 正式 RFS 商轉。透過嚴謹的 Gate 1（資產交付）、Gate 2（收入融資）與 Gate 3（權責治理）把關，確保專案如期、如質且零融資缺口推進。</p>
+        <div class="eyebrow">Part 3 · 商業模式 3.1</div>
+        <h1>三類營運模式比較、分拆彈性與資產退出策略</h1>
+        <p class="sub">面對算力價格劇烈波動，我方戰略優先採「白區租賃 (Wholesale Colo)」輕資產鎖定固定回報；並具備 10MW×4 分拆彈性，建立持有收租與資產打包出售雙軌退出路徑。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">輕資產白區租賃</span>
+        <span class="flag amber">10MW×4 分拆彈性</span>
+        <span class="flag purple">持有收租 / 整體打包出售</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>營運模式</th>
+                <th>運作機制與責任界面</th>
+                <th>核心優勢</th>
+                <th>代價與風險</th>
+                <th class="ctr">決策評級</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="good-row">
+                <td><b>① 白區租賃<br>(Wholesale Colo)</b></td>
+                <td>合作方自建白區、自購伺服器，向我方支付 15 年固定 NNN 租金</td>
+                <td><b>資金壓力最小、變現最快、徹底規避算力價格波動</b></td>
+                <td>收益上限固定，不參與算力暴利</td>
+                <td class="ctr"><span class="chip green">★★★★★ 首選</span></td>
+              </tr>
+              <tr>
+                <td><b>② 整機買斷<br>(Turnkey Sale)</b></td>
+                <td>建成後將完整算力中心或機電資產整體打包出售予機構投資人</td>
+                <td>收益最高、一次性大額回籠全部開發資金與利潤</td>
+                <td>建設與驗收標準極其嚴苛，需頂級客戶背書</td>
+                <td class="ctr"><span class="chip blue">★★★★☆ 退出期優選</span></td>
+              </tr>
+              <tr class="bad-row">
+                <td><b>③ JV 合資營運<br>(Joint Venture)</b></td>
+                <td>雙方按比例出資採購 GPU 伺服器，算力銷售後利潤分成</td>
+                <td>長期收益想像空間最大，可享受 AI 應用溢價</td>
+                <td><b>資金沉澱極重、承擔算力折舊與跌價劇烈風險</b></td>
+                <td class="ctr"><span class="chip coral">★★☆☆☆ 首案暫不考慮</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>🎯 40MW 招商分拆與退出路徑</h3>
+          <p>
+            <b>分拆彈性：</b>40MW IT 容量可整包單一客戶，亦可拆為 <b>10MW × 4</b> 分租不同 CSP。首案優先簽單一優質主力租戶，建立財務信用標竿。
+          </p>
+          <div class="table-wrap" style="margin-top:10px">
+            <table>
+              <thead>
+                <tr>
+                  <th>階段</th>
+                  <th>策略行動</th>
+                  <th>預期收益與回報</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>第 1~5 年</b></td>
+                  <td>15 年 NNN 包租穩定收租，快速償還專案貸款</td>
+                  <td>年租金 NT$ 27.6 億~32.2 億，Payback &lt; 6 年</td>
+                </tr>
+                <tr class="hl-row">
+                  <td><b>第 6 年起</b></td>
+                  <td>打包為收益型資產出售予壽險/REITs 或持續持有</td>
+                  <td>資產重估溢價 30%~50%，一次性獲利了結或穩健配息</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:6px">
+        <div class="card teal">
+          <h3>⚡ 規避算力波動</h3>
+          <p>算力市場日新月異、價格波動劇烈；做「收水電房租的房東」比「自己買卡挖礦賣算力」風險低數倍。</p>
+        </div>
+        <div class="card amber">
+          <h3>🤝 地產商一站式複製</h3>
+          <p>首案作為示範樣板，後續打包為「儲能 ＋ 800V 供電 ＋ 機電建置 ＋ 維運」一站式交鑰匙方案向全台複製。</p>
+        </div>
+        <div class="card purple">
+          <h3>💰 綠電替代效益</h3>
+          <p>台積電綠電採購已達 5.5 元/度；高電價環境下，進能服 40MW 高效節能機房具備極強定價防禦力。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：進能服 AIDC 商業模式研討 ｜ 營運模式與退出架構分析</div>
+      <div class="pageno">3.1</div>
+    </div>
+  </section>
+
+  <!-- P3.2 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 3 · 資金架構 3.2</div>
+        <h1>資金結構與機構對接：壽險資管 ＋ 專案融資雙軌</h1>
+        <p class="sub">對接富邦、國泰等壽險資管機構承接黑區、灰區、建物與土地；結合銀行團 15 年專案融資，將我方自有資金出資比例壓至 5～10%，實現極致資本槓桿。</p>
+      </div>
+      <div class="flags">
+        <span class="flag purple">壽險長租資管</span>
+        <span class="flag blue">自有資金 5~10%</span>
+        <span class="flag green">專案融資雙軌</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>資金結構模組</th>
+                <th>承接主體與出資範疇</th>
+                <th>出資比例</th>
+                <th>資金成本與預期條件</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>① 壽險資管機構<br>(富邦 / 國泰等)</b></td>
+                <td><b>土地、建物、黑區 161kV 變電所、灰區機電骨幹</b></td>
+                <td class="num"><b>60% ~ 70%</b></td>
+                <td>追求長期穩定 3.5%~4.5% 固定年化收益，簽 15 年長約</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>② 銀行團專案融資<br>(Project Finance)</b></td>
+                <td><b>機電設備採購、BESS 儲能微電網、一次側水泵與乾冷器</b></td>
+                <td class="num"><b>20% ~ 30%</b></td>
+                <td>以 15 年 NNN Master Lease 現金流為擔保，聯貸低利融資</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>③ SPV 股東自有資金<br>(進能服與核心團隊)</b></td>
+                <td><b>前期規畫、台電核供申請、建照申辦、專案開發與整合</b></td>
+                <td class="num"><b>5% ~ 10%</b></td>
+                <td>以極少自有資本撬動百億專案，IRR 回報率高達 25%+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card purple">
+          <h3>🏛️ 壽險資管痛點與我方互補籌碼</h3>
+          <p>
+            <b>壽險痛點：</b>國內壽險機構（如富邦、國泰每年數千億投資額度）雖具備巨量低成本資金與 AIDC 投資意願，但<b>普遍缺乏「具備 161kV 特高壓輸電條件的優質工業土地」與「機電系統整合能力」</b>。
+          </p>
+          <div class="tip" style="margin-top:10px">
+            <b>我方戰略價值：</b>進能服手握桃園 4,321 坪丁工優質基地 ＋ 161kV 直降 800Vdc 機電統包技術，正好成為壽險資金落地的最佳資產載體！
+          </div>
+        </div>
+      </div>
+
+      <div class="four-col" style="margin-top:6px">
+        <div class="metric purple">
+          <div class="k">5% ~ 10%</div>
+          <div class="t">自有資金出資比例，極致財務槓桿、大幅降低股權稀釋</div>
+        </div>
+        <div class="metric blue">
+          <div class="k">15 年長約</div>
+          <div class="t">壽險資管高度青睞之超長期穩定現金流資產標的</div>
+        </div>
+        <div class="metric green">
+          <div class="k">黑灰區包租</div>
+          <div class="t">壽險承接土地建物與基礎電力，白區由 Colo 自行裝修</div>
+        </div>
+        <div class="metric coral">
+          <div class="k">SPV 閉環</div>
+          <div class="t">專案公司獨立核算、資產隔離，符合金融機構風控標準</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：機構投資人訪談 ｜ 壽險資管與 AIDC 專案融資架構</div>
+      <div class="pageno">3.2</div>
+    </div>
+  </section>
+
+  <!-- P3.3 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 3 · 決策與里程碑 3.3</div>
+        <h1>專案推進里程碑、9 月美商招商與 Gate 1~3 閉環</h1>
+        <p class="sub">自 2026 Q3 啟動台電 161kV 核供審查、9 月赴美對接 17 家頭部 Colo，至 2027 Q4 正式 RFS 商轉。透過 Gate 1~3 嚴格閉環把關，確保全案如期如質商轉。</p>
       </div>
       <div class="flags">
         <span class="flag coral">Gate 1~3 閉環</span>
-        <span class="flag teal">2027 Q3/Q4 RFS</span>
+        <span class="flag teal">9 月美商 Colo 招商</span>
+        <span class="flag blue">2027 Q3/Q4 RFS</span>
       </div>
     </div>
     <div class="slide-body">
@@ -1300,13 +1500,13 @@ svg text{font-family:inherit}
             <!-- Bars -->
             <g text-anchor="start" font-size="11" font-weight="700">
               <!-- 土地與水保 -->
-              <rect x="20" y="56" width="370" height="22" rx="3" fill="#E8F1F9" stroke="#1968AD"/><text x="30" y="71" fill="#12293D">土地地籍整併、水保審查與建築執照取得</text>
+              <rect x="20" y="56" width="370" height="22" rx="3" fill="#E8F1F9" stroke="#1968AD"/><text x="30" y="71" fill="#12293D">地籍整併、水保審查與建築執照申辦 (9月赴美 17 家 Colo 招商)</text>
               <!-- 台電併網 -->
               <rect x="120" y="84" width="460" height="22" rx="3" fill="#FCF2DE" stroke="#E09A2B"/><text x="130" y="99" fill="#9a6a10">台電 161kV 專線核供、變電站施工與線路鋪設</text>
               <!-- 土建鋼構 -->
               <rect x="300" y="112" width="470" height="22" rx="3" fill="#E2F5F7" stroke="#1BB1BF"/><text x="310" y="127" fill="#12818C">4 層鋼構大樓建造 (承重 2.5T) ＋ 景觀滯洪池工程</text>
               <!-- 機電與 800Vdc -->
-              <rect x="590" y="140" width="470" height="22" rx="3" fill="#FBEAE5" stroke="#D95F45"/><text x="600" y="155" fill="#b4432c">Vertiv 800Vdc 集中整流、頂部匯流排裝設 ＋ RFS 開機</text>
+              <rect x="590" y="140" width="470" height="22" rx="3" fill="#FBEAE5" stroke="#D95F45"/><text x="600" y="155" fill="#b4432c">480V→800Vdc 集中整流、頂部匯流排裝設 ＋ RFS 開機</text>
             </g>
           </g>
         </svg>
@@ -1326,20 +1526,20 @@ svg text{font-family:inherit}
               <tr class="hl-row">
                 <td><b>Gate 1｜資產可交付？</b></td>
                 <td>
-                  • 台電 161kV 同意核供函與線路路權確認<br>
+                  • <b>台電 161kV 同意核供函與線路路權確認</b><br>
                   • 4,321 坪丁工建照核准 ＋ 水保計畫核定<br>
-                  • Vertiv 800Vdc 設備與乾冷器交期 Term Sheet
+                  • 集中整流設備與 Vertiv 乾冷器交期 Term Sheet
                 </td>
                 <td><span class="chip green">GO</span> 授權簽訂工程 EPC 與機電採購合約</td>
               </tr>
               <tr class="good-row">
                 <td><b>Gate 2｜收入可融資？</b></td>
                 <td>
-                  • 15 年不可撤銷 NNN Master Lease 正式簽署<br>
-                  • 意向租金 USD 180~210/kW/Mo 鎖定<br>
-                  • 承租方具備國際 CSP 或 AAA 級信評背書
+                  • <b>15 年不可撤銷 NNN Master Lease 正式簽署</b><br>
+                  • 意向租金 USD 180~210/kW/Mo 鎖定（9 月訪美對接）<br>
+                  • 壽險資管/銀行團專案融資 Term Sheet 核定
                 </td>
-                <td><span class="chip blue">GO</span> 啟動銀行團專案融資 (Project Finance)</td>
+                <td><span class="chip blue">GO</span> 啟動機構出資與專案融資撥款</td>
               </tr>
               <tr>
                 <td><b>Gate 3｜權責可治理？</b></td>
@@ -1355,20 +1555,20 @@ svg text{font-family:inherit}
         </div>
 
         <div class="card">
-          <h3>🎯 進能服 6692 的核心戰略定位</h3>
+          <h3>🎯 全台首座民營直連 Colo AIDC</h3>
           <p>
-            富邦能源、國際 CSP 與電信運營商手握綠電、土地、資金與算力需求，<b>但欠缺將 161kV 特高壓、800Vdc 機電直降、水保滯洪池與 15 年 NNN 包租無縫串接的系統整合能力</b>。
+            跳脫傳統電信商（中華電信/台灣大）框架，進能服直接對接美商頭部 Colo。9 月將赴加州灣區、達拉斯、西雅圖拜訪 17 家業者，直接以國際行情鎖定 15 年大約。
           </p>
           <div class="big-callout" style="margin-top:10px;padding:14px 18px">
-            <div class="label">一句話定位</div>
-            <div class="answer" style="font-size:1.15rem">做 AIDC 落地不可或缺的「能源與灰區電力樞紐」</div>
+            <div class="label">核心戰略定位</div>
+            <div class="answer" style="font-size:1.15rem">串聯「優質土地 × 161kV 機電 × 壽險資金 × 國際 Colo」</div>
           </div>
         </div>
       </div>
     </div>
     <div class="slide-foot">
       <div>來源：進能服 AIDC 場域經濟專案決策綱要 ｜ 董事會呈閱版</div>
-      <div class="pageno">3.1</div>
+      <div class="pageno">3.3</div>
     </div>
   </section>
 

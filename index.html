@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%23071d3b%27/%3E%3Cpath d=%27M10 50h12V32H10zm16 0h12V20H26zm16 0h12V8H42z%27 fill=%27%231bb1bf%27/%3E%3C/svg%3E">
+<title>台灣 AIDC 選址建議與桃園 40MW 個案開發決策平台｜進能服 6692</title>
+<meta name="description" content="AIDC 選址建議與桃園 40MW 實戰個案開發決策平台：涵蓋台灣併網硬約束、土地分區、800Vdc 原生電力架構、電信中立低延遲拓撲與 15 年 NNN 包租商業條款。">
+<style>
+:root{
+  --blue:#1968AD; --blue-d:#12518A; --blue-dd:#0C3A63; --blue-soft:#E8F1F9;
+  --teal:#1BB1BF; --teal-d:#12818C; --teal-soft:#E2F5F7;
+  --ink:#12293D; --muted:#5B7285; --line:#D9E3EC; --paper:#F4F7FA; --card:#fff;
+  --amber:#E09A2B; --amber-soft:#FCF2DE;
+  --coral:#D95F45; --coral-soft:#FBEAE5;
+  --grey:#9FB1C0; --grey-soft:#EDF1F5;
+  --green:#2E7D32; --green-soft:#E8F5E9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:50; height:54px;
+  display:flex; align-items:center; gap:8px; padding:0 20px;
+  background:rgba(255,255,255,.95); backdrop-filter:blur(8px);
+  border-bottom:2px solid var(--blue);
+}
+.topbar .brand{display:flex; align-items:center; gap:9px; margin-right:14px; white-space:nowrap; text-decoration:none}
+.topbar .brand .mk{flex:0 0 26px}
+.topbar .brand .tx{font-weight:800; font-size:.88rem; letter-spacing:.02em; color:var(--ink); line-height:1.15}
+.topbar .brand .tx small{display:block; font-weight:700; font-size:.66rem; letter-spacing:.08em; color:var(--blue)}
+.topnav{display:flex; gap:4px; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.topnav a{
+  text-decoration:none; color:var(--muted); font-size:.85rem; font-weight:600;
+  padding:6px 14px; border-radius:4px; white-space:nowrap; border:1px solid transparent;
+  transition:all .15s ease;
+}
+.topnav a:hover{color:var(--blue); background:var(--blue-soft)}
+.topnav a.active{color:#fff; background:var(--blue); font-weight:700}
+.topbar .meta{font-size:.75rem; color:var(--muted); white-space:nowrap; font-weight:600}
+@media(max-width:1120px){.topbar .meta{display:none}}
+@media(max-width:860px){.topbar .brand .tx{font-size:.78rem}}
+
+/* ---------- views / slides ---------- */
+.view{display:none}
+.view.active{display:block}
+.slide{
+  display:none; min-height:100vh; padding:78px 48px 88px;
+  max-width:1360px; margin:0 auto; flex-direction:column;
+}
+.slide.active{display:flex}
+.slide-header{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px}
+.eyebrow{font-size:.76rem; font-weight:800; letter-spacing:.14em; color:var(--teal-d); text-transform:uppercase; margin-bottom:6px}
+.slide-header h1,.slide-header h2{font-size:clamp(1.35rem,2.8vw,1.95rem); line-height:1.3; font-weight:800; max-width:28em; color:var(--ink)}
+.slide-header h1::after,.slide-header h2::after{
+  content:""; display:block; width:64px; height:4px; margin-top:10px;
+  background:linear-gradient(90deg,var(--blue),var(--teal));
+}
+.slide-header .sub{margin-top:10px; color:var(--muted); font-size:.92rem; max-width:56em; line-height:1.58}
+.flags{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+.flag{font-size:.72rem; font-weight:700; padding:5px 12px; border-radius:3px; white-space:nowrap}
+.flag.blue{background:var(--blue-soft); color:var(--blue-d)}
+.flag.teal{background:var(--teal-soft); color:var(--teal-d)}
+.flag.amber{background:var(--amber-soft); color:#9a6a10}
+.flag.coral{background:var(--coral-soft); color:#b4432c}
+.flag.green{background:var(--green-soft); color:var(--green)}
+.flag.grey{background:var(--grey-soft); color:var(--muted)}
+.slide-body{flex:1; display:flex; flex-direction:column; gap:16px}
+.slide-foot{display:flex; justify-content:space-between; gap:16px; margin-top:20px; padding-top:12px; border-top:1px solid var(--line); font-size:.73rem; color:var(--muted); background:rgba(255,255,255,.6); border-radius:3px; padding-left:8px; padding-right:8px}
+.slide-foot .pageno{white-space:nowrap; font-weight:800; color:var(--blue)}
+
+/* ---------- layout grids ---------- */
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch}
+.three-col{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+.four-col{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.five-col{display:grid; grid-template-columns:repeat(5,1fr); gap:10px}
+.split-45{display:grid; grid-template-columns:45% 1fr; gap:18px; align-items:start}
+.split-55{display:grid; grid-template-columns:1fr 45%; gap:18px; align-items:start}
+.split-img-right{display:grid; grid-template-columns:1fr 1.15fr; gap:18px; align-items:start}
+.split-img-left{display:grid; grid-template-columns:1.15fr 1fr; gap:18px; align-items:start}
+
+@media(max-width:1050px){
+  .slide{padding:72px 18px 96px}
+  .two-col,.three-col,.four-col,.five-col,.split-45,.split-55,.split-img-right,.split-img-left{grid-template-columns:1fr}
+}
+
+/* ---------- components ---------- */
+.card{background:var(--card); border:1px solid var(--line); border-top:3px solid var(--blue); border-radius:4px; padding:16px 18px; box-shadow:0 3px 10px rgba(18,41,61,.04)}
+.card.teal{border-top-color:var(--teal)}
+.card.amber{border-top-color:var(--amber)}
+.card.coral{border-top-color:var(--coral)}
+.card.green{border-top-color:var(--green)}
+.card.grey{border-top-color:var(--grey)}
+.card h3{font-size:.98rem; font-weight:800; margin-bottom:8px; color:var(--ink)}
+.card p{font-size:.88rem; color:var(--muted); line-height:1.55}
+
+.metric{border-radius:4px; padding:14px 16px; border:1px solid var(--line); background:#fff; border-left:5px solid var(--blue); box-shadow:0 2px 8px rgba(18,41,61,.03)}
+.metric .k{font-size:clamp(1.4rem,2.4vw,1.95rem); font-weight:900; line-height:1.1; color:var(--blue); font-variant-numeric:tabular-nums}
+.metric .t{font-size:.8rem; color:var(--muted); margin-top:6px; line-height:1.45}
+.metric.teal{border-left-color:var(--teal)} .metric.teal .k{color:var(--teal-d)}
+.metric.amber{border-left-color:var(--amber)} .metric.amber .k{color:#9a6a10}
+.metric.coral{border-left-color:var(--coral)} .metric.coral .k{color:#b4432c}
+.metric.green{border-left-color:var(--green)} .metric.green .k{color:var(--green)}
+.metric.grey{border-left-color:var(--grey)} .metric.grey .k{color:var(--muted)}
+
+.big-callout{
+  background:linear-gradient(120deg,var(--blue-dd),var(--blue) 62%,var(--teal-d)); color:#fff;
+  border-radius:4px; padding:20px 24px; position:relative; overflow:hidden;
+}
+.big-callout .label{font-size:.72rem; letter-spacing:.14em; opacity:.85; font-weight:800; margin-bottom:6px}
+.big-callout .answer{font-size:clamp(1.1rem,2.2vw,1.5rem); font-weight:800; line-height:1.38}
+.big-callout .more{margin-top:8px; font-size:.88rem; opacity:.92; line-height:1.55}
+
+.table-wrap{background:#fff; border:1px solid var(--line); border-radius:4px; overflow-x:auto; box-shadow:0 4px 14px rgba(7,29,59,.05)}
+table{width:100%; border-collapse:collapse; font-size:.85rem; min-width:560px}
+th{background:var(--blue); color:#fff; text-align:left; font-weight:700; padding:9px 12px; white-space:nowrap; font-size:.82rem}
+th.sub{background:var(--blue-d)}
+td{padding:8px 12px; border-bottom:1px solid #EDF1F5; vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#FAFCFE}
+tbody tr:hover{background:#F0F6FC}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
+td.ctr,th.ctr{text-align:center}
+.hl-row{background:var(--amber-soft) !important}
+.hl-row td{font-weight:700}
+.bad-row{background:var(--coral-soft) !important}
+.good-row{background:var(--green-soft) !important}
+
+.table-toggle{display:block; width:100%; padding:9px 12px; border:0; border-top:1px solid var(--line); background:var(--blue-soft); color:var(--blue-dd); text-align:left; font:700 .78rem inherit; cursor:pointer}
+.table-toggle:hover{background:#d8e6f5}
+.table-extra{display:none}
+.table-wrap.expanded .table-extra{display:table-row}
+
+.chip{display:inline-block; font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:3px; white-space:nowrap}
+.chip.blue{background:var(--blue-soft); color:var(--blue-d)}
+.chip.teal{background:var(--teal-soft); color:var(--teal-d)}
+.chip.amber{background:var(--amber-soft); color:#9a6a10}
+.chip.coral{background:var(--coral-soft); color:#b4432c}
+.chip.green{background:var(--green-soft); color:var(--green)}
+.chip.grey{background:var(--grey-soft); color:var(--muted)}
+
+.note{background:var(--amber-soft); border-left:4px solid var(--amber); padding:10px 14px; font-size:.86rem; border-radius:0 3px 3px 0}
+.warn{background:var(--coral-soft); border-left:4px solid var(--coral); padding:10px 14px; font-size:.86rem; border-radius:0 3px 3px 0}
+.tip{background:var(--green-soft); border-left:4px solid var(--green); padding:10px 14px; font-size:.86rem; border-radius:0 3px 3px 0}
+
+.fig{background:#fff; border:1px solid var(--line); border-radius:4px; padding:12px 14px; box-shadow:0 3px 12px rgba(18,41,61,.04)}
+.fig .cap{font-size:.76rem; color:var(--muted); margin-top:8px; text-align:center}
+.fig .figtitle{font-size:.86rem; font-weight:800; margin-bottom:8px; color:var(--blue-dd)}
+.fig img{display:block; width:100%; height:auto; border-radius:3px; object-fit:contain; background:#0b1d30}
+.fig.pure-img{padding:0; overflow:hidden; background:#08192b}
+.fig.pure-img img{width:100%; height:100%; object-fit:contain; border-radius:0}
+
+/* SVG helpers */
+svg text{font-family:inherit}
+.fig svg{display:block; width:100%; height:auto}
+.fig svg path[stroke]:not([fill]){fill:none}
+
+/* ---------- home ---------- */
+.home{min-height:100vh}
+.hero{
+  position:relative; overflow:hidden; color:#fff;
+  background:linear-gradient(115deg,var(--blue-dd) 0%,var(--blue) 55%,#1580A8 100%);
+  padding:96px 48px 52px;
+}
+.hero .inner{max-width:1360px; margin:0 auto; position:relative; z-index:2}
+.hero .kicker{font-size:.8rem; font-weight:800; letter-spacing:.16em; color:#8FD9E4}
+.hero h1{font-size:clamp(1.75rem,4.2vw,2.9rem); font-weight:900; line-height:1.24; margin-top:12px; max-width:22em}
+.hero .lede{margin-top:14px; max-width:48em; font-size:.98rem; opacity:.93; line-height:1.68}
+.hero .herometa{margin-top:20px; display:flex; gap:8px; flex-wrap:wrap}
+.hero .herometa span{font-size:.74rem; font-weight:700; background:rgba(255,255,255,.16); padding:5px 12px; border-radius:3px}
+.hero .deco{position:absolute; right:-60px; top:-40px; width:840px; opacity:.4; pointer-events:none; z-index:1}
+@media(max-width:1000px){.hero{padding:80px 18px 40px} .hero .deco{width:560px; right:-140px; opacity:.28}}
+.homebody{max-width:1360px; margin:0 auto; padding:30px 48px 56px}
+@media(max-width:1000px){.homebody{padding:24px 18px 46px}}
+
+.part-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px}
+.part-card{
+  display:block; text-decoration:none; color:var(--ink); background:#fff;
+  border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:4px; padding:22px;
+  transition:transform .15s ease, box-shadow .15s ease; position:relative; overflow:hidden;
+}
+.part-card:hover{transform:translateY(-4px); box-shadow:0 12px 28px rgba(18,41,61,.12)}
+.part-card.c2{border-top-color:var(--teal)} .part-card.c3{border-top-color:var(--amber)} .part-card.c4{border-top-color:var(--coral)}
+.part-card .pc-eyebrow{font-size:.72rem; font-weight:800; letter-spacing:.14em; color:var(--blue)}
+.part-card.c2 .pc-eyebrow{color:var(--teal-d)} .part-card.c3 .pc-eyebrow{color:#9a6a10} .part-card.c4 .pc-eyebrow{color:#b4432c}
+.part-card h2{font-size:1.22rem; font-weight:800; margin:8px 0 6px; line-height:1.35}
+.part-card p{color:var(--muted); font-size:.87rem; line-height:1.58}
+.part-card .pc-flags{margin-top:12px; display:flex; gap:6px; flex-wrap:wrap}
+.part-card .pc-go{margin-top:14px; font-weight:800; color:var(--blue); font-size:.85rem}
+.part-card .pc-icon{position:absolute; right:14px; top:14px; opacity:.85}
+
+.quick-spec-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:24px}
+.home-foot{padding-top:20px; font-size:.74rem; color:var(--muted); border-top:1px solid var(--line); margin-top:30px; line-height:1.8}
+
+/* ---------- bottom controls ---------- */
+.deckbar{position:fixed; left:0; right:0; bottom:0; z-index:50; pointer-events:none; display:none}
+.progress{height:4px; background:#DFE7EE}
+.progress .fill{height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--teal)); transition:width .25s ease}
+.hint{position:absolute; left:20px; bottom:14px; font-size:.74rem; color:var(--muted); background:rgba(255,255,255,.94); padding:4px 10px; border-radius:3px; border:1px solid var(--line)}
+.ctrl{position:absolute; right:16px; bottom:12px; display:flex; align-items:center; gap:8px; pointer-events:auto}
+.ctrl .counter{font-size:.78rem; color:var(--muted); background:rgba(255,255,255,.94); border:1px solid var(--line); padding:5px 12px; border-radius:3px; font-variant-numeric:tabular-nums}
+.ctrl button{
+  width:32px; height:32px; border:1px solid var(--line); background:rgba(255,255,255,.94);
+  border-radius:3px; cursor:pointer; font-size:1.1rem; color:var(--ink); font-weight:800;
+  display:flex; align-items:center; justify-content:center; transition:background .15s;
+}
+.ctrl button:hover{background:var(--blue); color:#fff}
+@media(max-width:800px){.hint{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ================= TOP BAR ================= -->
+<div class="topbar">
+  <a class="brand" href="#home">
+    <svg class="mk" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+      <rect x="0" y="0" width="12" height="12" rx="2" fill="#1968AD" opacity=".9"/>
+      <rect x="14" y="0" width="12" height="12" rx="2" fill="#1BB1BF" opacity=".9"/>
+      <rect x="0" y="14" width="12" height="12" rx="2" fill="#1BB1BF" opacity=".6"/>
+      <rect x="14" y="14" width="12" height="12" rx="2" fill="#1968AD"/>
+    </svg>
+    <div class="tx">進能服 6692<small>AIDC 場域經濟・決策中樞</small></div>
+  </a>
+  <nav class="topnav">
+    <a href="#home" data-nav="home">封面</a>
+    <a href="#p1" data-nav="p1">Part 1 選址建議 (5 頁)</a>
+    <a href="#p2" data-nav="p2">Part 2 桃園個案背景 (5 頁)</a>
+    <a href="#p3" data-nav="p3">Part 3 決策與里程碑 (1 頁)</a>
+  </nav>
+  <div class="meta">基準：2026/08 ｜ 呈閱：董事長、總經理</div>
+</div>
+
+<!-- ================= HOME VIEW ================= -->
+<div class="view active home" id="view-home">
+  <div class="hero">
+    <svg class="deco" viewBox="0 0 900 520" aria-hidden="true">
+      <g fill="#fff" opacity=".22">
+        <path d="M300 60 L470 8 L600 60 L430 112 Z"/>
+        <path d="M620 130 L790 78 L900 122 L730 174 Z"/>
+        <path d="M250 250 L420 198 L540 244 L370 296 Z"/>
+        <path d="M660 330 L830 278 L900 305 L730 357 Z"/>
+      </g>
+      <g fill="#8FD9E4" opacity=".4">
+        <circle cx="560" cy="180" r="50"/>
+        <circle cx="420" cy="330" r="40"/>
+      </g>
+      <g stroke="#fff" stroke-width="2" fill="none" opacity=".45">
+        <path d="M120 190 L470 402"/><circle cx="120" cy="190" r="5"/>
+        <path d="M180 400 L300 400 Q330 400 330 370 L330 300"/><circle cx="180" cy="400" r="5"/>
+        <path d="M700 420 L560 470 L200 470"/><circle cx="200" cy="470" r="5"/>
+      </g>
+    </svg>
+    <div class="inner">
+      <div class="kicker">進能服 6692 · AIDC 場域經濟實戰庫</div>
+      <h1>算力的瓶頸在電，落地的勝負在選址與架構</h1>
+      <p class="lede">
+        本決策資料庫完整解構台灣 AIDC 開發全流程：從台電 161kV 輸電硬約束、土地分區與水保規範，到桃園蘆竹 40MW 實戰個案——包含 4 層鋼構立體化剖面、Vertiv 800Vdc 原生直降機電、淡水/台北/竹科 Sub-1ms 電信樞紐，以及 15 年 NNN 包租 LOI 商業閉環。
+      </p>
+      <div class="herometa">
+        <span>台電 161kV 專用進線</span>
+        <span>4,321 坪丁種建地 ＋ 4,657 坪水保滯洪</span>
+        <span>Vertiv 800Vdc 原生 Vera Rubin Ready</span>
+        <span>350 Racks NVL72/144</span>
+        <span>15 年 NNN 包租 LOI</span>
+        <span>設計 PUE &lt; 1.15</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="homebody">
+    <div class="part-cards">
+      <a class="part-card" href="#p1-1">
+        <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><rect x="1" y="1" width="12" height="12" rx="2" fill="#1968AD" opacity=".2"/><rect x="17" y="1" width="12" height="12" rx="2" fill="#1968AD" opacity=".45"/><rect x="1" y="17" width="12" height="12" rx="2" fill="#1968AD" opacity=".45"/><rect x="17" y="17" width="12" height="12" rx="2" fill="#1968AD"/></svg>
+        <div class="pc-eyebrow">PART 1</div>
+        <h2>AIDC 選址建議</h2>
+        <p>「有電的地」比「有地」更稀缺。解析台灣併網硬約束、名義申請作廢率 70%、土地與水保配比、Sub-1ms 電信拓撲與 30 分鐘初評查核清單。</p>
+        <div class="pc-flags"><span class="chip blue">5 頁</span><span class="chip teal">評估漏斗</span><span class="chip coral">Go / Hold / Stop</span></div>
+        <div class="pc-go">進入選址章節 &rarr;</div>
+      </a>
+
+      <a class="part-card c2" href="#p2-1">
+        <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><path d="M4 26 L4 17 L10 17 L10 26 M12 26 L12 11 L18 11 L18 26 M20 26 L20 4 L26 4 L26 26" stroke="#1BB1BF" stroke-width="2.4" fill="none"/></svg>
+        <div class="pc-eyebrow">PART 2</div>
+        <h2>個案背景：桃園 40MW 實戰開發</h2>
+        <p>以 6.X.1.6 實體案場圖資為基礎：4,321 坪丁工總圖、4 層鋼構建築剖面、161kV 直降 Vertiv 800Vdc 電力、電信中立樞紐與 15 年 NNN 包租 LOI 條款。</p>
+        <div class="pc-flags"><span class="chip teal">5 頁</span><span class="chip blue">800Vdc 原生</span><span class="chip amber">15 年 NNN 包租</span></div>
+        <div class="pc-go">進入個案章節 &rarr;</div>
+      </a>
+
+      <a class="part-card c3" href="#p3-1">
+        <svg class="pc-icon" width="30" height="30" viewBox="0 0 30 30"><path d="M15 3l6 6-6 6-6-6z" fill="#E09A2B" opacity=".5"/><path d="M15 15l6 6-6 6-6-6z" fill="#E09A2B"/></svg>
+        <div class="pc-eyebrow">PART 3</div>
+        <h2>決策矩陣與專案里程碑</h2>
+        <p>2026~2027 RFS 開發甘特圖、投資人三道交付閘門（資產可交付、收入可融資、權責可治理）與專案推進路線圖。</p>
+        <div class="pc-flags"><span class="chip amber">1 頁</span><span class="chip coral">Gate 1~3 閉環</span><span class="chip grey">2027 Q3/Q4 RFS</span></div>
+        <div class="pc-go">進入決策章節 &rarr;</div>
+      </a>
+    </div>
+
+    <!-- Quick Spec Grid -->
+    <div class="quick-spec-grid">
+      <div class="metric blue">
+        <div class="k">40 MW</div>
+        <div class="t">IT 總容量（台電 161kV 特高壓專用變電站進線）</div>
+      </div>
+      <div class="metric teal">
+        <div class="k">800 Vdc</div>
+        <div class="t">原生直流頂部匯流排（直插 NVIDIA Vera Rubin）</div>
+      </div>
+      <div class="metric amber">
+        <div class="k">4,321 坪</div>
+        <div class="t">丁種建築用地（建蔽 70% / 容積 300%）</div>
+      </div>
+      <div class="metric green">
+        <div class="k">&lt; 1.15</div>
+        <div class="t">設計 PUE（Vertiv 乾冷器 ＋ 景觀滯洪池備援）</div>
+      </div>
+      <div class="metric coral">
+        <div class="k">15 年 NNN</div>
+        <div class="t">不可撤銷淨包租合約（USD 180~210 / kW / Mo）</div>
+      </div>
+    </div>
+
+    <div class="home-foot">
+      進能服（6692）AIDC 場域經濟實戰資料庫 ｜ 內部決策與業務開發專用 ｜ 跨章節支援鍵盤 ← → 鍵切換、Home 鍵回封面、F 鍵全螢幕
+    </div>
+  </div>
+</div>
+
+<!-- ================= PART 1: 選址建議 ================= -->
+<div class="view" id="view-p1">
+
+  <!-- P1.1 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 1 · 選址建議 1.1</div>
+        <h1>台灣 AIDC 選址核心邏輯：五大支柱在地化重排</h1>
+        <p class="sub">土地與稅制在台灣境內差異有限；真正拉開場址可行性的是「併網區位」與「輸電電壓等級」。對投資人而言，選址的第一步就是排除不可逆的電網硬約束。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">投資者優先</span>
+        <span class="flag blue">台灣在地化矩陣</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-right">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>評估支柱</th>
+                <th class="ctr">BNEF 東南亞</th>
+                <th class="ctr">台灣在地權重</th>
+                <th>關鍵決策含義與審查證據</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>① 能源供應 / 併網區位</b></td>
+                <td class="ctr">4</td>
+                <td class="ctr"><b style="color:var(--coral);font-size:1.1rem">6</b></td>
+                <td><b>唯一硬約束</b>：需 69kV/161kV 輸電等級；台電核供函是土地成立的前提。</td>
+              </tr>
+              <tr>
+                <td><b>② 土地審批與地籍</b></td>
+                <td class="ctr">3</td>
+                <td class="ctr"><b>2</b></td>
+                <td>土地不缺，「有電土地」極度稀缺；丁工與特區優先，免冗長地目變更。</td>
+              </tr>
+              <tr>
+                <td><b>③ 光纖連接與延遲</b></td>
+                <td class="ctr">2</td>
+                <td class="ctr"><b>2</b></td>
+                <td>全島基建強；對託管型仍需具備<b>電信中立 MMR</b> 與<b>雙路實體進線</b>。</td>
+              </tr>
+              <tr>
+                <td><b>④ 在運負載與生態</b></td>
+                <td class="ctr">2</td>
+                <td class="ctr"><b>1</b></td>
+                <td>竹科半導體與台北金融聚落已成型；往返延遲需符合分散式 AI 要求 (&lt;1ms)。</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>⑤ 水資源與能效 (新增)</b></td>
+                <td class="ctr">—</td>
+                <td class="ctr"><b style="color:var(--green);font-size:1.1rem">1</b></td>
+                <td>液冷系統需水源與滯洪池備援；納入能源使用說明書審查 (PUE ≤1.3)。</td>
+              </tr>
+              <tr>
+                <td><b>⑥ 租稅與地方優惠</b></td>
+                <td class="ctr">1</td>
+                <td class="ctr"><b style="color:var(--grey)">0</b></td>
+                <td>全島法規與稅制一致，在各縣市間不構成實質選址差異化。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="fig pure-img" style="min-height:340px">
+          <img src="assets/aidc-site-screening-v1.png" alt="AIDC 選址篩選情境與輸電路徑圖">
+        </div>
+      </div>
+      <div class="three-col" style="margin-top:6px">
+        <div class="card">
+          <h3>⚡ 電網先於土地</h3>
+          <p>大型 AIDC 需 69kV 以上輸電系統；中壓單線僅 5~10MW。變電所饋線容量先於地價決定案場生死。</p>
+        </div>
+        <div class="card teal">
+          <h3>🌐 客戶價值定位</h3>
+          <p>台灣適合低延遲、貼近製造業與金融雲的託管型/企業自用 AIDC；純粹比拚低電價的超大規模訓練場非優勢。</p>
+        </div>
+        <div class="card green">
+          <h3>💧 水能效預先驗證</h3>
+          <p>5MW 以上 AIDC 強制審查能源說明書；需同時確保乾冷器/滯洪池水源，避免枯水期斷水風險。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：AIDC 選址評估知識庫 #001 ｜ BNEF 評估架構在地化轉譯</div>
+      <div class="pageno">1.1</div>
+    </div>
+  </section>
+
+  <!-- P1.2 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 1 · 選址建議 1.2</div>
+        <h1>併網硬約束與核供決策閘門：杜絕名義容量陷阱</h1>
+        <p class="sub">台電累積 79 件、4,758MW 的輸電級申請，逾 7 成因逾期未正式送件而作廢。評估市場規模應以「已送電與施工中」的約 870.5MW 為真實作業量級，非 3GW 名義核准。</p>
+      </div>
+      <div class="flags">
+        <span class="flag coral">選址第一道門</span>
+        <span class="flag blue">台電核供函唯一性</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <!-- SVG Gate Flow -->
+      <div class="fig" style="padding:10px 14px">
+        <div class="figtitle">AIDC 併網選址五大決策閘門</div>
+        <svg viewBox="0 0 1180 180" role="img" aria-label="AIDC 併網五大閘門">
+          <defs>
+            <marker id="ar1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#1968AD"/></marker>
+          </defs>
+          <g text-anchor="middle">
+            <rect x="20" y="40" width="200" height="85" rx="6" fill="#E8F1F9" stroke="#1968AD" stroke-width="2"/>
+            <text x="120" y="74" font-size="15" font-weight="800" fill="#12293D">① 規模與容量</text>
+            <text x="120" y="98" font-size="12" fill="#5B7285">目標 MW、分期、商轉時程</text>
+
+            <rect x="260" y="40" width="200" height="85" rx="6" fill="#E2F5F7" stroke="#1BB1BF" stroke-width="2"/>
+            <text x="360" y="74" font-size="15" font-weight="800" fill="#12293D">② 輸電接入</text>
+            <text x="360" y="98" font-size="12" fill="#5B7285">69kV / 161kV 變電所與饋線</text>
+
+            <rect x="500" y="40" width="200" height="85" rx="6" fill="#FCF2DE" stroke="#E09A2B" stroke-width="2"/>
+            <text x="600" y="74" font-size="15" font-weight="800" fill="#12293D">③ 台電核供條件</text>
+            <text x="600" y="98" font-size="12" fill="#5B7285">取得「同意核供函」正本</text>
+
+            <rect x="740" y="40" width="200" height="85" rx="6" fill="#FBEAE5" stroke="#D95F45" stroke-width="2"/>
+            <text x="840" y="74" font-size="15" font-weight="800" fill="#12293D">④ 北部 5MW+ 限制</text>
+            <text x="840" y="98" font-size="12" fill="#5B7285">電源點距離與自備電廠條件</text>
+
+            <rect x="980" y="40" width="180" height="85" rx="6" fill="#0C3A63"/>
+            <text x="1070" y="74" font-size="15" font-weight="800" fill="#fff">⑤ 能源使用說明書</text>
+            <text x="1070" y="98" font-size="12" fill="#8FD9E4">能源種類、數量、PUE ≤1.3</text>
+
+            <g stroke="#1968AD" stroke-width="2" marker-end="url(#ar1)">
+              <path d="M220 82 h35"/><path d="M460 82 h35"/><path d="M700 82 h35"/><path d="M940 82 h35"/>
+            </g>
+            <text x="590" y="152" font-size="13" font-weight="800" fill="#D95F45">未取得台電「同意核供函」前，土地在法律與財務上皆不可列為可開發 AIDC 場址！</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="two-col" style="margin-top:6px">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>台電輸電級申請狀態（2025/11 統計）</th>
+                <th class="num">件數</th>
+                <th class="num">容量 (MW)</th>
+                <th>落地轉化率與實務意涵</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>累積申請總量</b></td>
+                <td class="num">79 件</td>
+                <td class="num">約 4,758 MW</td>
+                <td>代表市場意向，多數案件僅處於排隊探路階段</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>同意核供 (名義核准)</b></td>
+                <td class="num">40 件</td>
+                <td class="num">約 3,033 MW</td>
+                <td><b>作廢率 &gt; 70%</b>；逾期未辦正式用電者資格自動失效</td>
+              </tr>
+              <tr class="bad-row">
+                <td><b>不同意核供</b></td>
+                <td class="num">39 件</td>
+                <td class="num">約 1,725 MW</td>
+                <td>電網饋線無容量、未鄰近輸電節點或北部政策受限</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>實際已送電商轉</b></td>
+                <td class="num">4 戶</td>
+                <td class="num">約 303.5 MW</td>
+                <td>全台真正已完成並網發電的實體稼動容量</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>施工中、已核定案件</b></td>
+                <td class="num">5 戶</td>
+                <td class="num">約 567.0 MW</td>
+                <td>預計於 2026~2027 年間陸續完工通電</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card coral">
+          <h3>🚨 投資人警示：杜絕名義數字灌水</h3>
+          <p>
+            市場簡報若直接引用「全台核准 3GW」，會嚴重誤導算力供需預期。
+            <b>真實已在運與興建中的量級僅約 870.5MW</b>。
+          </p>
+          <div class="warn" style="margin-top:10px">
+            <b>北部解禁真相：</b>經濟部北部 5MW+ 限制並非全面放開，僅限大潭、協和電廠約 2 公里半徑內且符合特定附帶條件，其餘區域仍嚴格管制。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：台電輸電級資料中心併網申請統計 ｜ 進能服 AIDC 知識庫整理</div>
+      <div class="pageno">1.2</div>
+    </div>
+  </section>
+
+  <!-- P1.3 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 1 · 選址建議 1.3</div>
+        <h1>土地分區與環境防護：丁種建地高容積 ＋ 水保綠帶綜效</h1>
+        <p class="sub">AIDC 屬於高電度、極高樓板承重（2.0~2.5 T/m²）之特殊建築。優先挑選丁種建築用地，搭配周邊保護區/水保滯洪池，兼具 ESG 韌性與極致開發效益。</p>
+      </div>
+      <div class="flags">
+        <span class="flag green">丁種建築用地優勢</span>
+        <span class="flag amber">水保與環評紅線</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>土地類型</th>
+                <th class="ctr">建蔽 / 容積</th>
+                <th class="ctr">審批期程</th>
+                <th>機電承重適用性</th>
+                <th>環評 / 水保門檻</th>
+                <th class="ctr">推薦評級</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>丁種建築用地 (非都市)</b></td>
+                <td class="ctr">70% / 300%</td>
+                <td class="ctr">3~6 個月</td>
+                <td><b>極高</b>：可建 4 層以上重鋼構，承重 2.5T/m²</td>
+                <td>免地目變更；面積達標需水保計畫</td>
+                <td class="ctr"><span class="chip green">★★★★★ 首選</span></td>
+              </tr>
+              <tr>
+                <td><b>乙種工業區 (都市計畫)</b></td>
+                <td class="ctr">60% / 210%</td>
+                <td class="ctr">6~12 個月</td>
+                <td><b>高</b>：地價較高，適合都會型高樓層機房</td>
+                <td>依都審規範，需注意周邊住宅環境抗告</td>
+                <td class="ctr"><span class="chip blue">★★★★☆ 優選</span></td>
+              </tr>
+              <tr>
+                <td><b>產業園區 / 科學園區</b></td>
+                <td class="ctr">50-60% / 200-300%</td>
+                <td class="ctr">6~15 個月</td>
+                <td><b>極高</b>：水電路網齊備，但需入園審查</td>
+                <td>園區統一環評，但受制於管理局配額</td>
+                <td class="ctr"><span class="chip teal">★★★★☆ 次選</span></td>
+              </tr>
+              <tr class="bad-row">
+                <td><b>農業用地 (特目變更)</b></td>
+                <td class="ctr">— (需專案)</td>
+                <td class="ctr">18~24 個月</td>
+                <td><b>低</b>：地質軟弱、聯外道路狹窄、供電困難</td>
+                <td>需完整農變、水保與專案環評，風險高</td>
+                <td class="ctr"><span class="chip coral">★★☆☆☆ 迴避</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fig pure-img" style="min-height:330px">
+          <img src="assets/aidc-energy-ecosystem-v1.png" alt="AIDC 土地分區與能源生態系配置">
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:6px">
+        <div class="card">
+          <h3>🏗️ 丁種建地高容積率</h3>
+          <p>建蔽 70% / 容積 300%，能以 4,000 餘坪基地創造破萬坪總樓地板面積，集中配置機房，節省土地成本。</p>
+        </div>
+        <div class="card teal">
+          <h3>🛡️ 保護區滯洪池雙重價值</h3>
+          <p>將保護區規劃為 ESG 水保景觀滯洪池，平時作為自然排水與實體安控緩衝，緊急時直接做液冷備用水源。</p>
+        </div>
+        <div class="card amber">
+          <h3>🔇 農地作為重機電緩衝</h3>
+          <p>周邊狹長農地可作為 N+1 柴發與 161kV 變電所噪音隔離帶，免去昂貴隔音牆並符合鄰地環評噪音管制標準。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：非都市土地使用管制規則 ｜ AIDC 實戰開發與環境防護規劃</div>
+      <div class="pageno">1.3</div>
+    </div>
+  </section>
+
+  <!-- P1.4 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 1 · 選址建議 1.4</div>
+        <h1>電信網路、海纜登陸與超低延遲拓撲</h1>
+        <p class="sub">AIDC 是分散式 AI 推論與跨國算力網絡的樞紐。場址必須具備「電信中立 MMR」、「雙實體隔離暗光纖」，並以 Sub-1ms 延遲串聯淡水國際海纜與竹科 AI 生態圈。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">Sub-1ms 超低延遲</span>
+        <span class="flag blue">Carrier-Neutral MMR</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:330px">
+          <img src="assets/aidc-telecom-connectivity.jpg" alt="北台灣電信海纜與 AIDC 低延遲網路拓撲">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>關鍵連線節點</th>
+                <th>戰略角色與網絡地位</th>
+                <th class="ctr">往返延遲 (RTT)</th>
+                <th>光纖進線與容災規格</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>淡水海纜登陸站 (Tamsui CLS)</b></td>
+                <td>直通美、日、韓、星等國際海纜總出口</td>
+                <td class="ctr"><b style="color:var(--green)">&lt; 0.5 ms</b></td>
+                <td>直連國際暗光纖；雙實體地下管溝防挖斷</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>台北金融核心 (Taipei Cloud)</b></td>
+                <td>國內外金融雲、是方電訊 Chief IXP 網路中樞</td>
+                <td class="ctr"><b style="color:var(--green)">&lt; 0.5 ms</b></td>
+                <td>三大電信 (CHT/TWM/FET) 100G/400G 直連</td>
+              </tr>
+              <tr>
+                <td><b>新竹科學園區 (HSP Core)</b></td>
+                <td>台積電與全台半導體 / AI 硬體製造重鎮</td>
+                <td class="ctr"><b style="color:var(--blue)">&lt; 0.8 ms</b></td>
+                <td>專用 DWDM 波分複用通道，支援即時推論</td>
+              </tr>
+              <tr>
+                <td><b>電信中立 MMR (Meet-Me Room)</b></td>
+                <td>100% 開放架構，租戶自由選擇連線固網商</td>
+                <td class="ctr">—</td>
+                <td>配置雙實體電信室，消除單一機房失火風險</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="four-col" style="margin-top:6px">
+        <div class="metric teal">
+          <div class="k">&lt; 0.5 ms</div>
+          <div class="t">至淡水海纜登陸站與台北金融核心，極致超低延遲</div>
+        </div>
+        <div class="metric blue">
+          <div class="k">Dual Vaults</div>
+          <div class="t">西側 ＋ 南側道路獨立人孔進線，杜絕單點故障 (SPOF)</div>
+        </div>
+        <div class="metric amber">
+          <div class="k">Carrier-Neutral</div>
+          <div class="t">三大電信 (中華/台哥大/遠傳) 原生暗光纖無縫整合</div>
+        </div>
+        <div class="metric green">
+          <div class="k">Chief IX Direct</div>
+          <div class="t">直連是方電訊網際網路交換中心，全球網路直通</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：台灣網際網路交換中心 (TWIX/Chief IX) ｜ 國際海纜拓撲分析</div>
+      <div class="pageno">1.4</div>
+    </div>
+  </section>
+
+  <!-- P1.5 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 1 · 選址建議 1.5</div>
+        <h1>30 分鐘場址初評清單與 Go / Hold / Stop 決策表</h1>
+        <p class="sub">供業務開發、地主會談與現場勘查使用。將「看起來可以」轉化為具備台電公文、地籍謄本、水權證明與電信路由的可查證行動清單。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">可直接複用</span>
+        <span class="flag coral">Go / Hold / Stop</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="four-col">
+        <div class="card coral">
+          <h3>① 併網與電力</h3>
+          <p>
+            □ 目標 MW / 161kV 輸電等級<br>
+            □ 取得台電同意核供函文號<br>
+            □ 距 161kV 變電所 &lt; 2km<br>
+            □ 饋線容量足額無卡關<br>
+            □ 北部 5MW+ 豁免條件確認
+          </p>
+        </div>
+        <div class="card">
+          <h3>② 土地與審批</h3>
+          <p>
+            □ 丁種建地或已核定工業區<br>
+            □ 產權單一 / 地主出租意向<br>
+            □ 面積 ≥ 3,000 坪 / 方正基地<br>
+            □ 樓板承重 ≥ 2.5 T/m²<br>
+            □ 水保與都審程序明確
+          </p>
+        </div>
+        <div class="card amber">
+          <h3>③ 水能效與環境</h3>
+          <p>
+            □ 自來水供水容量與水權<br>
+            □ 具備滯洪池作液冷備用水<br>
+            □ 設計 PUE ≤ 1.15 達標<br>
+            □ 綠電採購或直供路徑<br>
+            □ 噪音與周邊社區防護
+          </p>
+        </div>
+        <div class="card teal">
+          <h3>④ 光纖與市場</h3>
+          <p>
+            □ 雙實體不同道路光纖進線<br>
+            □ 至台北/海纜 RTT &lt; 0.5ms<br>
+            □ 電信中立 MMR 空間預留<br>
+            □ Wholesale 大客戶預租需求<br>
+            □ 15 年 NNN 包租條件洽談
+          </p>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:8px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:14%">初評結果</th>
+              <th>可進入下一步的最低客觀證據要求</th>
+              <th style="width:30%">授權業務行動與下一步</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="good-row">
+              <td><span class="chip green" style="font-size:.82rem">🟢 GO 可建檔</span></td>
+              <td><b>已取得台電核供函</b>或公文；土地分區為丁工/工業地，產權清楚，雙光纖可行。</td>
+              <td>建立地籍配置圖、排定現地勘查、製作概念規劃設計、展開客戶 LOI 談判。</td>
+            </tr>
+            <tr class="hl-row">
+              <td><span class="chip amber" style="font-size:.82rem">🟡 HOLD 補件</span></td>
+              <td>電力、分區、水權或光纖任一關鍵資料尚待補件，但存在明確可查證公文路徑。</td>
+              <td>列出缺件清單、指定責任人與限期查證；<b>補齊前不列入正式投資財務模型</b>。</td>
+            </tr>
+            <tr class="bad-row">
+              <td><span class="chip coral" style="font-size:.82rem">🔴 STOP 暫停</span></td>
+              <td>無 69kV/161kV 擴充容量可能、使用分區不符、或水源/社區抗爭無法化解。</td>
+              <td>記錄排除原因與留存檔案，轉入備選案場清單，不浪費工程規劃與法務資源。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>現場勘查紀錄格式：</b>案名＿＿＿＿＿＿　勘查日期＿＿＿＿＿＿　地點＿＿＿＿＿＿　負責主管＿＿＿＿＿＿　初評結果：□ GO　□ HOLD　□ STOP　待補件清單＿＿＿＿＿＿
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：AIDC 選址評估知識庫 #001 業務初評標準作業程序 (SOP)</div>
+      <div class="pageno">1.5</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= PART 2: 桃園 40MW 個案背景 ================= -->
+<div class="view" id="view-p2">
+
+  <!-- P2.1 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.1</div>
+        <h1>地籍分區與案場總體規劃：桃園蘆竹 40MW AIDC</h1>
+        <p class="sub">基地整合 4,237 坪丁種建築用地、4,657 坪保護區滯洪池、683 坪農地隔音緩衝與 31 坪水利用地，實現兼具高密度算力承載與 ESG 景觀水保的示範案場。</p>
+      </div>
+      <div class="flags">
+        <span class="flag blue">4,321 坪丁工基地</span>
+        <span class="flag green">4,657 坪 ESG 滯洪池</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:350px">
+          <img src="assets/aidc-site-master-layout.jpg" alt="Taoyuan 40MW AIDC Site Master Layout Diagram">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>地號地塊</th>
+                <th>使用分區</th>
+                <th class="num">面積 (坪 / m²)</th>
+                <th>規劃主要功能與機電配置</th>
+                <th>法規與開發優勢</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>Parcel 1147</b></td>
+                <td>丁種建築用地</td>
+                <td class="num">4,237 坪 (14,006 m²)</td>
+                <td><b>主機房大樓</b>：2F~4F 6,500 坪白區 (350 Racks)、1F 800Vdc 室、MMR 室</td>
+                <td>建蔽 70% / 容積 300%，極致立體化容納高密度算力</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>Parcels 1132~1139</b></td>
+                <td>保護區</td>
+                <td class="num">4,657 坪 (15,395 m²)</td>
+                <td><b>ESG 景觀滯洪池</b> ＋ 實體安控圍籬 (Defense-Grade Fence)</td>
+                <td>兼作 AIDC 液冷系統緊急備用水源與天然安控緩衝</td>
+              </tr>
+              <tr>
+                <td><b>Parcel 1146</b></td>
+                <td>農業用地</td>
+                <td class="num">683 坪 (2,241 m²)</td>
+                <td><b>N+1 靜音柴油發電機組區</b> ＋ 綠化防音隔離帶</td>
+                <td>有效吸收發電機運轉噪音，符合環評管制標準</td>
+              </tr>
+              <tr>
+                <td><b>Parcels 1142/1143</b></td>
+                <td>水利用地</td>
+                <td class="num">31 坪 (約 102 m²)</td>
+                <td><b>一次側冷卻水管溝</b> (Cooling Water Piping)</td>
+                <td>地下密閉管溝連結主機房與戶外景觀滯洪池</td>
+              </tr>
+              <tr>
+                <td><b>Parcel 1140</b></td>
+                <td>丁種建築用地</td>
+                <td class="num">84 坪 (約 278 m²)</td>
+                <td><b>主出入口大門</b> (Main Entrance Gate) ＋ 地磅安檢</td>
+                <td>緊鄰主要幹道，便利 161kV 特高壓進線與重裝施工</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:6px">
+        <div class="card">
+          <h3>⚡ 161kV 專用變電站</h3>
+          <p>基地西側直接接入台電 161kV 特高壓專線，建置專用變電站與油浸式變壓器，確保 40MW IT 滿載容量。</p>
+        </div>
+        <div class="card teal">
+          <h3>🌐 雙獨立光纖進線</h3>
+          <p>Fiber Entrance A (西側道路) 與 Fiber Entrance B (南側道路) 實體隔離，直入 1F 電信中立 MMR 室。</p>
+        </div>
+        <div class="card green">
+          <h3>🌊 液冷緊急備用水</h3>
+          <p>4,657 坪保護區景觀滯洪池儲水量充足，可提供 CDU 液冷系統連續數日無斷水運行保障。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：桃園 40MW AIDC 地籍套疊與總體佈局規劃圖（6.X.1.6 實戰圖資）</div>
+      <div class="pageno">2.1</div>
+    </div>
+  </section>
+
+  <!-- P2.2 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.2</div>
+        <h1>4 層鋼構建築剖面：白區灰區垂直分離設計</h1>
+        <p class="sub">樓高 6.5 米、樓板承重 2.5 噸/m²。頂樓配置 Vertiv 乾冷器、2F~4F 容納 350 機櫃原生 800Vdc 白區、1F 集中整流與中壓配電灰區、戶外佈置 161kV 變電所與 BESS 儲能。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">樓板承重 2.5 T/m²</span>
+        <span class="flag blue">設計 PUE &lt; 1.15</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:350px">
+          <img src="assets/aidc-building-cross-section.jpg" alt="Taoyuan 40MW AIDC Architectural Building Cross-Section">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>空間層級</th>
+                <th>規格與空間參數</th>
+                <th>核心配置設備</th>
+                <th>工程亮點與設計效益</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="good-row">
+                <td><b>屋頂層 (Rooftop)</b></td>
+                <td>露天結構加固平台</td>
+                <td><b>Vertiv Dry Coolers 乾冷器機組 (#1~#3)</b> ＋ 冷卻擴充迴路</td>
+                <td>結合大氣自然冷卻 (Free Cooling)，實現<b>設計 PUE &lt; 1.15</b></td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>4F 白區 (IT Hall)</b></td>
+                <td>淨高 6.5m ｜ 承重 2.5 T/m²</td>
+                <td>高密度機櫃 (Rack)、CDU 液冷分配單元、頂部匯流排</td>
+                <td>大跨距無柱空間，單櫃支援 160kW~200kW 超高散熱密度</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>3F 白區 (IT Hall)</b></td>
+                <td>淨高 6.5m ｜ 承重 2.5 T/m²</td>
+                <td>高密度機櫃、CDU 液冷分配單元 (2F~4F 共 350 Racks)</td>
+                <td>超強樓板承重，完美支撐 NVIDIA GB200 / Vera Rubin 極重機櫃</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>2F 白區 (IT Hall)</b></td>
+                <td>淨高 6.5m ｜ 承重 2.5 T/m²</td>
+                <td><b>Native 800Vdc Busway Ready</b> 頂部匯流排直插機櫃</td>
+                <td>原生 800V 直流隨插即用，零機房改造成本直上 Vera Rubin</td>
+              </tr>
+              <tr>
+                <td><b>1F 灰區 (Gray Space)</b></td>
+                <td>淨高 7.0m ｜ 承重 3.0 T/m²</td>
+                <td>480Vac 中壓開關櫃、<b>Vertiv 800Vdc 集中整流器</b>、一次側水泵房、MMR</td>
+                <td>整流熱源 100% 集中於灰區處理，白區淨空間利用率最大化</td>
+              </tr>
+              <tr>
+                <td><b>戶外區 (Heavy Yard)</b></td>
+                <td>戶外獨立重裝防護區</td>
+                <td><b>161kV 專用變電所</b> (NFPA 防火牆)、<b>LiFePO4 儲能貨櫃 (BESS)</b>、N+1 靜音柴發</td>
+                <td>重電力與消防實體隔離，具備微電網削峰與不斷電備援能力</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="four-col" style="margin-top:6px">
+        <div class="metric blue">
+          <div class="k">6.5 m</div>
+          <div class="t">白區淨挑高，提供充裕液冷管線與 800Vdc 頂部匯流排空間</div>
+        </div>
+        <div class="metric coral">
+          <div class="k">2.5 T/m²</div>
+          <div class="t">重載鋼構樓板，符合 Vera Rubin NVL144 極重機櫃需求</div>
+        </div>
+        <div class="metric teal">
+          <div class="k">350 Racks</div>
+          <div class="t">2F~4F 總機櫃容量，支援大規模 AI 超算叢集運作</div>
+        </div>
+        <div class="metric green">
+          <div class="k">NFPA 隔離</div>
+          <div class="t">161kV 變壓器與 BESS 儲能獨立重裝區，最高防火等級</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：桃園 40MW AIDC 建築剖面與機電配置圖（6.X.1.6 實戰圖資）</div>
+      <div class="pageno">2.2</div>
+    </div>
+  </section>
+
+  <!-- P2.3 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.3</div>
+        <h1>161kV 直降與 Vertiv 800Vdc 原生電力架構</h1>
+        <p class="sub">顛覆傳統 48Vdc 架構！1F 集中整流轉換效率 &gt; 97.5%，工作電流自 3,750A 驟降至 225A（減降 94%），母排減銅 50%，原生直上 NVIDIA Vera Rubin NVL72/144。</p>
+      </div>
+      <div class="flags">
+        <span class="flag coral">電流劇降 94%</span>
+        <span class="flag teal">Vera Rubin Day-1 Ready</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:350px">
+          <img src="assets/aidc-800vdc-power-architecture.jpg" alt="800Vdc Power Architecture and Vera Rubin Spec">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>技術指標</th>
+                <th>傳統 48Vdc 分散整流架構</th>
+                <th>Vertiv 800Vdc 集中整流架構 (桃園案)</th>
+                <th>差異效益與競爭優勢</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>單機櫃電力密度</b></td>
+                <td>40 kW ~ 60 kW / Rack</td>
+                <td><b>160 kW ~ 180 kW / Rack</b> (峰值 200 kW)</td>
+                <td><b>電力密度提升 300%~400%</b></td>
+              </tr>
+              <tr class="good-row">
+                <td><b>機櫃母排工作電流</b></td>
+                <td>高達 <b>3,750 A</b> (發熱極高、母排粗大)</td>
+                <td>驟降至 <b>225 A</b></td>
+                <td><b>電流減少 94%</b>，徹底消除匯流排過熱瓶頸</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>銅導體用量與重量</b></td>
+                <td>笨重、需極厚銅排與天花板重度加固</td>
+                <td><b>母排銅重量節省 50% 以上</b></td>
+                <td>大幅降低結構應力與建置成本</td>
+              </tr>
+              <tr>
+                <td><b>整流器散熱與位置</b></td>
+                <td>分散在機櫃白區內部，增加空調負擔</td>
+                <td><b>移至 1F 灰區集中整流</b> (&gt;97.5% 效率)</td>
+                <td>白區零 PSU 熱源，助攻 <b>PUE &lt; 1.15</b></td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>NVIDIA Vera Rubin 支援</b></td>
+                <td>需大規模二次機電改裝、停機升級</td>
+                <td><b>Day 1 原生隨插即用</b> (Plug & Play)</td>
+                <td><b>零機房改造成本</b>，精準對齊 2027 出貨潮</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:6px">
+        <div class="card">
+          <h3>⚡ 161kV → 480Vac → 800Vdc</h3>
+          <p>台電 161kV 專線進線，經戶外變電站降壓為 480Vac，再於 1F 經 Vertiv 集中整流器高效率轉換為 800Vdc 直流電。</p>
+        </div>
+        <div class="card teal">
+          <h3>🔌 2F~4F 頂部匯流排隨插即用</h3>
+          <p>每櫃配置 180kW @ 225A Tap-off Box，由天花板頂部直接垂降接入 Vera Rubin 機櫃，隨插即用、部署極速。</p>
+        </div>
+        <div class="card coral">
+          <h3>🏆 Off-taker 核心戰略價值</h3>
+          <p>客戶進駐時無需自行採購昂貴整流機櫃或改建電力管線，節省 6~12 個月改裝工期，顯著提升租賃意願。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：Vertiv 800Vdc 電力架構規格 ｜ NVIDIA Vera Rubin NVL72/NVL144 白皮書（6.X.1.6 實戰圖資）</div>
+      <div class="pageno">2.3</div>
+    </div>
+  </section>
+
+  <!-- P2.4 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.4</div>
+        <h1>戰略電信中立樞紐與北台灣黃金三角網路</h1>
+        <p class="sub">桃園案場坐落於淡水國際海纜 (RTT &lt;0.5ms)、台北金融核心 (RTT &lt;0.5ms) 與竹科半導體聚落 (RTT &lt;0.8ms) 的正中心。具備電信中立 MMR 與雙實體獨立道路進線。</p>
+      </div>
+      <div class="flags">
+        <span class="flag teal">淡水海纜 RTT &lt; 0.5ms</span>
+        <span class="flag blue">竹科 AI 生態 RTT &lt; 0.8ms</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:350px">
+          <img src="assets/aidc-telecom-connectivity.jpg" alt="Strategic Telecom Hub and Connectivity Architecture">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>連線維度</th>
+                <th>設計架構與技術指標</th>
+                <th>核心功能與保障機制</th>
+                <th>客戶與營運戰略價值</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>電信中立 MMR 室</b></td>
+                <td>100% Open Access 電信中立</td>
+                <td>原生整合中華電信、台灣大、遠傳三大固網暗光纖</td>
+                <td>直連 Chief IX 是方電訊網際網路交換中心與國際海纜</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>實體雙路進線 (Dual Entrances)</b></td>
+                <td>西側道路人孔 ＋ 南側道路人孔</td>
+                <td>兩條實體完全隔離之地下光纖管溝 (Dual Road Vaults)</td>
+                <td><b>消除單點故障 (SPOF-free)</b>，杜絕道路施工挖斷光纖風險</td>
+              </tr>
+              <tr>
+                <td><b>淡水海纜登陸站 (Tamsui CLS)</b></td>
+                <td><b>往返延遲 RTT &lt; 0.5 ms</b></td>
+                <td>超高速光纖通道直通美、日、韓、星國際海纜出口</td>
+                <td>跨國雲端巨頭 (Hyperscalers) 全球 AI 流量交換低延遲</td>
+              </tr>
+              <tr>
+                <td><b>台北金融核心 (Taipei Financial)</b></td>
+                <td><b>往返延遲 RTT &lt; 0.5 ms</b></td>
+                <td>直連台北金融雲、證券期貨交換所與企業總部</td>
+                <td>金融級高頻交易、合規雲端與企業專屬推論即時反應</td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>新竹科學園區 (Hsinchu TSMC)</b></td>
+                <td><b>往返延遲 RTT &lt; 0.8 ms</b></td>
+                <td>直通台積電與半導體 / AI 硬體供應鏈生態系</td>
+                <td>毫秒級支援晶圓製程模擬、邊緣推論與分散式大模型訓練</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:6px">
+        <div class="card teal">
+          <h3>⚡ 北台灣黃金樞紐</h3>
+          <p>作為淡水海纜、台北雲端與新竹硬體生態之交會樞紐，Sub-1ms 的超低延遲滿足各類嚴苛算力應用需求。</p>
+        </div>
+        <div class="card">
+          <h3>🛡️ 雙獨立道路人孔進線</h3>
+          <p>兩路光纖分別自不同外部幹道接入，即便單一路線發生突發挖斷事故，系統仍可在毫秒內無感自動切換。</p>
+        </div>
+        <div class="card amber">
+          <h3>🌐 100% 電信中立開放</h3>
+          <p>租戶可依自身跨國合約自由挑選中華電信、台灣大、遠傳或國際運營商，無單一電信商綁定溢價風險。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：桃園 40MW AIDC 電信網路拓撲圖與連線規格（6.X.1.6 實戰圖資）</div>
+      <div class="pageno">2.4</div>
+    </div>
+  </section>
+
+  <!-- P2.5 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.5</div>
+        <h1>非約束性意向書 (LOI) 核心指標與 15 年 NNN 包租條款</h1>
+        <p class="sub">Colo 評估案場四大指標：Power (電)、Property (地)、PUE/Cooling (冷卻)、Permit/Timeline (時程)。採 15 年不可撤銷淨包租模式 (NNN Lease)，鎖定高能見度穩定現金流。</p>
+      </div>
+      <div class="flags">
+        <span class="flag amber">15 年 NNN 包租</span>
+        <span class="flag coral">USD 180~210 / kW / Mo</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="split-img-left">
+        <div class="fig pure-img" style="min-height:350px">
+          <img src="assets/aidc-loi-commercial-terms.jpg" alt="Non-Binding LOI and Commercial Terms">
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>商業條款項目</th>
+                <th>條款內容與數值標準</th>
+                <th>國際商業合約意涵</th>
+                <th>財務效益與收益估算</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>意向容量 (Reserved Capacity)</b></td>
+                <td><b>20 MW ~ 40 MW IT Capacity</b></td>
+                <td>Colo 批發型 (Wholesale) 整棟或分期包租</td>
+                <td>鎖定國際大型 CSP、Colo 運營商或電信大廠</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>承租模式與年限 (Lease Terms)</b></td>
+                <td><b>15 年不可撤銷淨包租</b> (15-Yr NNN Master Lease)</td>
+                <td>承租方全額負擔地價稅、保險、營運維護與電費</td>
+                <td><b>業主享有可融資的超長期穩定淨現金流 (Bankable)</b></td>
+              </tr>
+              <tr class="hl-row">
+                <td><b>意向租金區間 (Target Rent)</b></td>
+                <td><b>USD 180 ~ 210 / kW / Month</b><br>(約 NT$ 5,760 ~ 6,720 / kW / 月)</td>
+                <td>對齊國際 Tier 3+ Wholesale 液冷 AIDC 市場行情</td>
+                <td>40MW 滿載年租金約 <b>NT$ 27.6 億 ~ 32.2 億元</b></td>
+              </tr>
+              <tr>
+                <td><b>電力規格 (Power SLA)</b></td>
+                <td>台電 161kV 特高壓進線 ＋ Vertiv 800Vdc</td>
+                <td>40MW IT 專用容量保證 ＋ BESS 儲能微電網備援</td>
+                <td>提供 99.999% 五個九的高可用性電力品質保證</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>商轉時程 (Timeline & RFS)</b></td>
+                <td><b>2027 年 Q3 / Q4 開機商轉</b> (Ready for Service)</td>
+                <td><b>完美對齊 NVIDIA Vera Rubin 全球出貨高峰</b></td>
+                <td><b>開張即滿租</b>，專案投資回收期 (Payback) &lt; 6 年</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="four-col" style="margin-top:6px">
+        <div class="metric coral">
+          <div class="k">NT$ 27.6億+</div>
+          <div class="t">40MW 滿載年租金營收規模（依 USD 180/kW/Mo 估算）</div>
+        </div>
+        <div class="metric blue">
+          <div class="k">15 年 NNN</div>
+          <div class="t">Triple-Net 淨包租，維運與電費全由租戶負擔，零營運摩擦</div>
+        </div>
+        <div class="metric teal">
+          <div class="k">40 MW SLA</div>
+          <div class="t">台電 161kV 特高壓雙迴路供電，銀行團專案融資高度認可</div>
+        </div>
+        <div class="metric green">
+          <div class="k">2027 Q3/Q4</div>
+          <div class="t">準時對齊 Vera Rubin 規模交付，卡位下一代 AI 算力紅利</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：桃園 40MW AIDC 非約束性意向書 (LOI/EOI) 條款框架（6.X.1.6 實戰圖資）</div>
+      <div class="pageno">2.5</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= PART 3: 決策與里程碑 ================= -->
+<div class="view" id="view-p3">
+
+  <!-- P3.1 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 3 · 決策矩陣 3.1</div>
+        <h1>專案開發里程碑與投資人三道交付閘門</h1>
+        <p class="sub">自 2026 Q3 啟動至 2027 Q4 正式 RFS 商轉。透過嚴謹的 Gate 1（資產交付）、Gate 2（收入融資）與 Gate 3（權責治理）把關，確保專案如期、如質且零融資缺口推進。</p>
+      </div>
+      <div class="flags">
+        <span class="flag coral">Gate 1~3 閉環</span>
+        <span class="flag teal">2027 Q3/Q4 RFS</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <!-- SVG Roadmap Gantt -->
+      <div class="fig" style="padding:10px 14px">
+        <div class="figtitle">桃園 40MW AIDC 開發至商轉時程路線圖 (2026 Q3 ~ 2027 Q4)</div>
+        <svg viewBox="0 0 1180 180" role="img" aria-label="AIDC 開發時程甘特圖">
+          <g text-anchor="middle" font-size="12">
+            <!-- Timeline header -->
+            <rect x="20" y="20" width="180" height="28" fill="#12293D" rx="3"/><text x="110" y="39" fill="#fff" font-weight="800">2026 Q3</text>
+            <rect x="210" y="20" width="180" height="28" fill="#12293D" rx="3"/><text x="300" y="39" fill="#fff" font-weight="800">2026 Q4</text>
+            <rect x="400" y="20" width="180" height="28" fill="#12293D" rx="3"/><text x="490" y="39" fill="#fff" font-weight="800">2027 Q1</text>
+            <rect x="590" y="20" width="180" height="28" fill="#12293D" rx="3"/><text x="680" y="39" fill="#fff" font-weight="800">2027 Q2</text>
+            <rect x="780" y="20" width="180" height="28" fill="#12293D" rx="3"/><text x="870" y="39" fill="#fff" font-weight="800">2027 Q3</text>
+            <rect x="970" y="20" width="190" height="28" fill="#12293D" rx="3"/><text x="1065" y="39" fill="#fff" font-weight="800">2027 Q4 (RFS)</text>
+
+            <!-- Bars -->
+            <g text-anchor="start" font-size="11" font-weight="700">
+              <!-- 土地與水保 -->
+              <rect x="20" y="56" width="370" height="22" rx="3" fill="#E8F1F9" stroke="#1968AD"/><text x="30" y="71" fill="#12293D">土地地籍整併、水保審查與建築執照取得</text>
+              <!-- 台電併網 -->
+              <rect x="120" y="84" width="460" height="22" rx="3" fill="#FCF2DE" stroke="#E09A2B"/><text x="130" y="99" fill="#9a6a10">台電 161kV 專線核供、變電站施工與線路鋪設</text>
+              <!-- 土建鋼構 -->
+              <rect x="300" y="112" width="470" height="22" rx="3" fill="#E2F5F7" stroke="#1BB1BF"/><text x="310" y="127" fill="#12818C">4 層鋼構大樓建造 (承重 2.5T) ＋ 景觀滯洪池工程</text>
+              <!-- 機電與 800Vdc -->
+              <rect x="590" y="140" width="470" height="22" rx="3" fill="#FBEAE5" stroke="#D95F45"/><text x="600" y="155" fill="#b4432c">Vertiv 800Vdc 集中整流、頂部匯流排裝設 ＋ RFS 開機</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="two-col" style="margin-top:6px">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>交付閘門</th>
+                <th>核心查核標準與必備文件</th>
+                <th>決策授權下一步</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hl-row">
+                <td><b>Gate 1｜資產可交付？</b></td>
+                <td>
+                  • 台電 161kV 同意核供函與線路路權確認<br>
+                  • 4,321 坪丁工建照核准 ＋ 水保計畫核定<br>
+                  • Vertiv 800Vdc 設備與乾冷器交期 Term Sheet
+                </td>
+                <td><span class="chip green">GO</span> 授權簽訂工程 EPC 與機電採購合約</td>
+              </tr>
+              <tr class="good-row">
+                <td><b>Gate 2｜收入可融資？</b></td>
+                <td>
+                  • 15 年不可撤銷 NNN Master Lease 正式簽署<br>
+                  • 意向租金 USD 180~210/kW/Mo 鎖定<br>
+                  • 承租方具備國際 CSP 或 AAA 級信評背書
+                </td>
+                <td><span class="chip blue">GO</span> 啟動銀行團專案融資 (Project Finance)</td>
+              </tr>
+              <tr>
+                <td><b>Gate 3｜權責可治理？</b></td>
+                <td>
+                  • SPV 股權結構、母公司履約保證確立<br>
+                  • EPC 總承包責任介面與工期罰則簽定<br>
+                  • ESG 景觀滯洪池維護與水權公文歸屬
+                </td>
+                <td><span class="chip teal">GO</span> 全面破土動工，如期達成 2027 Q3/Q4 RFS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>🎯 進能服 6692 的核心戰略定位</h3>
+          <p>
+            富邦能源、國際 CSP 與電信運營商手握綠電、土地、資金與算力需求，<b>但欠缺將 161kV 特高壓、800Vdc 機電直降、水保滯洪池與 15 年 NNN 包租無縫串接的系統整合能力</b>。
+          </p>
+          <div class="big-callout" style="margin-top:10px;padding:14px 18px">
+            <div class="label">一句話定位</div>
+            <div class="answer" style="font-size:1.15rem">做 AIDC 落地不可或缺的「能源與灰區電力樞紐」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：進能服 AIDC 場域經濟專案決策綱要 ｜ 董事會呈閱版</div>
+      <div class="pageno">3.1</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= BOTTOM CONTROLS ================= -->
+<div class="deckbar" id="deckbar">
+  <div class="progress"><div class="fill" id="progressFill"></div></div>
+  <div class="hint">← → 換頁 ‧ Home 回封面 ‧ F 全螢幕 ‧ 點擊展開完整表格</div>
+  <div class="ctrl">
+    <span class="counter" id="counter">1 / 1</span>
+    <button id="btnPrev" aria-label="上一頁">‹</button>
+    <button id="btnNext" aria-label="下一頁">›</button>
+  </div>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+(function(){
+  var parts = {
+    p1: [].slice.call(document.querySelectorAll('#view-p1 .slide')),
+    p2: [].slice.call(document.querySelectorAll('#view-p2 .slide')),
+    p3: [].slice.call(document.querySelectorAll('#view-p3 .slide'))
+  };
+  var order = ['p1','p2','p3'];
+  var state = { view:'home', idx:0 };
+  var last = { p1:0, p2:0, p3:0 };
+  var views = {
+    home: document.getElementById('view-home'),
+    p1: document.getElementById('view-p1'),
+    p2: document.getElementById('view-p2'),
+    p3: document.getElementById('view-p3')
+  };
+  var deckbar = document.getElementById('deckbar');
+  var fill = document.getElementById('progressFill');
+  var counter = document.getElementById('counter');
+
+  function render(){
+    Object.keys(views).forEach(function(k){
+      if(views[k]) views[k].classList.toggle('active', k===state.view);
+    });
+    var navs = document.querySelectorAll('[data-nav]');
+    for(var i=0;i<navs.length;i++){
+      navs[i].classList.toggle('active', navs[i].getAttribute('data-nav')===state.view);
+    }
+    if(state.view==='home'){
+      deckbar.style.display='none';
+    } else {
+      deckbar.style.display='block';
+      var slides = parts[state.view];
+      if(slides && slides.length){
+        slides.forEach(function(s,i){ s.classList.toggle('active', i===state.idx); });
+        counter.textContent = (state.idx+1)+' / '+slides.length;
+        fill.style.width = ((state.idx+1)/slides.length*100)+'%';
+        last[state.view]=state.idx;
+      }
+    }
+    window.scrollTo(0,0);
+  }
+
+  function goHash(hash){
+    hash = (hash||'#home').replace('#','');
+    if(hash==='home'||hash===''){ state.view='home'; render(); return; }
+    var m = hash.match(/^(p1|p2|p3)-(\d+)$/);
+    if(m){
+      var v=m[1], i=parseInt(m[2],10)-1;
+      if(parts[v] && parts[v][i]){ state.view=v; state.idx=i; render(); return; }
+    }
+    if(parts[hash]){ state.view=hash; state.idx=last[hash]||0; render(); return; }
+    state.view='home'; render();
+  }
+
+  function setHash(){
+    var h = state.view==='home' ? '#home' : '#'+state.view+'-'+(state.idx+1);
+    if(location.hash!==h) history.replaceState(null,'',h);
+  }
+
+  function move(d){
+    if(state.view==='home'){
+      if(d>0){ state.view='p1'; state.idx=0; render(); setHash(); }
+      return;
+    }
+    var slides = parts[state.view];
+    var n = state.idx + d, pos = order.indexOf(state.view);
+    if(n < 0){
+      if(pos > 0){ state.view=order[pos-1]; state.idx=parts[state.view].length-1; }
+      else { state.view='home'; }
+    } else if(n >= slides.length){
+      if(pos < order.length-1){ state.view=order[pos+1]; state.idx=0; }
+      else { state.view='home'; }
+    } else {
+      state.idx=n;
+    }
+    render(); setHash();
+  }
+
+  document.getElementById('btnPrev').addEventListener('click',function(){move(-1)});
+  document.getElementById('btnNext').addEventListener('click',function(){move(1)});
+
+  document.addEventListener('keydown',function(e){
+    var t=e.target;
+    if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT')) return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); move(1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); move(-1); }
+    else if(e.key==='Home'){ e.preventDefault(); state.view='home'; render(); setHash(); }
+    else if(e.key==='End'&&state.view!=='home'){ e.preventDefault(); state.idx=parts[state.view].length-1; render(); setHash(); }
+    else if(e.key==='f'||e.key==='F'){
+      if(document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+
+  var tx=null, ty=null;
+  document.addEventListener('touchstart',function(e){ tx=e.changedTouches[0].clientX; ty=e.changedTouches[0].clientY; },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(tx===null) return;
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)) move(dx<0?1:-1);
+    tx=null; ty=null;
+  },{passive:true});
+
+  window.addEventListener('hashchange',function(){ goHash(location.hash); });
+  goHash(location.hash);
+})();
+</script>
+<script>
+/* 表格展開/收合功能 */
+document.querySelectorAll('.slide .table-wrap').forEach(function(wrap){
+  var rows=Array.prototype.slice.call(wrap.querySelectorAll('tbody tr'));
+  if(rows.length<=4){return;}
+  rows.slice(4).forEach(function(row){row.classList.add('table-extra');});
+  var button=document.createElement('button');
+  button.type='button';
+  button.className='table-toggle';
+  button.textContent='展開完整資料（共 '+rows.length+' 筆）';
+  button.addEventListener('click',function(){
+    var open=wrap.classList.toggle('expanded');
+    button.textContent=open?'收合完整資料':'展開完整資料（共 '+rows.length+' 筆）';
+  });
+  wrap.appendChild(button);
+});
+</script>
+</body>
+</html>

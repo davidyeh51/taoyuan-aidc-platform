@@ -217,7 +217,12 @@ svg text{font-family:inherit}
 }
 .ctrl button:hover{background:var(--blue); color:#fff}
 @media(max-width:800px){.hint{display:none}}
+
+.custom-pin { background: none; border: none; }
 </style>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -235,7 +240,7 @@ svg text{font-family:inherit}
   <nav class="topnav">
     <a href="#home" data-nav="home">封面</a>
     <a href="#p1" data-nav="p1">Part 1 選址建議 (5 頁)</a>
-    <a href="#p2" data-nav="p2">Part 2 桃園個案背景 (6 頁)</a>
+    <a href="#p2" data-nav="p2">Part 2 桃園個案背景 (7 頁)</a>
     <a href="#p3" data-nav="p3">Part 3 商模、資金與里程碑 (3 頁)</a>
   </nav>
   <div class="meta">基準：2026/08 ｜ 呈閱：董事長、總經理</div>
@@ -829,7 +834,7 @@ svg text{font-family:inherit}
       <div>
         <div class="eyebrow">Part 2 · 個案背景 2.1</div>
         <h1>地籍分區與案場總體規劃：桃園蘆竹 40MW AIDC</h1>
-        <p class="sub">基地整合 4,237 坪丁種建築用地、4,657 坪保護區滯洪池、683 坪農地隔音緩衝與 31 坪水利用地，實現兼具高密度算力承載與 ESG 景觀水保的示範案場。</p>
+        <p class="sub">座落於<b>桃園蘆竹後壁段 1147 地號等</b>（約 1.4 公頃一般農業區/丁建），整合 4,237 坪丁工基地、4,657 坪保護區滯洪池與周邊緩衝，實現兼具高密度算力與 ESG 的示範案場。</p>
       </div>
       <div class="flags">
         <span class="flag blue">4,321 坪丁工基地</span>
@@ -906,6 +911,32 @@ svg text{font-family:inherit}
         <div class="card green">
           <h3>🌊 液冷緊急備用水</h3>
           <p>4,657 坪保護區景觀滯洪池儲水量充足，可提供 CDU 液冷系統連續數日無斷水運行保障。</p>
+        </div>
+      </div>
+    
+      <div class="card purple" style="margin-top:12px">
+        <h3>📄 土地釋疑與法規查核 (桃園蘆竹後壁段 1147 地號)</h3>
+        <div class="table-wrap" style="margin-top:8px">
+          <table>
+            <tbody>
+              <tr>
+                <td style="width:16%"><b>設施認定</b></td>
+                <td>算力中心在地方主管機關（桃園市政府）認定中，<b>多數可屬「工業設施/資訊處理設施」</b>，最終以送件後經發局審查意見為定。</td>
+              </tr>
+              <tr>
+                <td><b>使用分區</b></td>
+                <td>基地為<b>丁種建築用地</b>，依法可執行工業設施與廠房相關（低汙染）開發。</td>
+              </tr>
+              <tr>
+                <td><b>興辦計畫</b></td>
+                <td>整體面積 <b>&lt; 2 公頃（約 1.4 公頃）</b>，不須額外製作興辦事業計畫，大幅縮短前置期。</td>
+              </tr>
+              <tr>
+                <td><b>環境評估</b></td>
+                <td>該案規模與性質<b>不在環評條件內（免環評）</b>，但後續需向主管機關申請出具免環評證明文件。</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1290,8 +1321,8 @@ svg text{font-family:inherit}
     <div class="slide-body">
       <div class="split-img-left">
         <div class="fig pure-img" style="min-height:380px; position:relative; padding:0; overflow:hidden;">
-          <!-- Google Maps Iframe -->
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14451.983637175512!2d121.2858!3d25.0456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468218158eb0933%3A0xc312b9186ed11075!2z5qGD5ZyS5biC6Jit56u55Y2A!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw" width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <!-- Leaflet Google Map -->
+          <div id="aidc-map" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:1;"></div>
         </div>
 
         <div class="table-wrap">
@@ -1307,12 +1338,12 @@ svg text{font-family:inherit}
               <tr class="hl-row">
                 <td><b>台電南崁變電所 (南崁 D/S)</b></td>
                 <td><b style="color:var(--green)">約 5 km</b></td>
-                <td><b>最佳首選 (Primary)</b><br>距離基地最近，管排與專線鋪設成本最低，為 161kV 併聯第一目標。</td>
+                <td><b>最佳首選 (Primary)</b><br>管排與專線鋪設成本最低，為 161kV 併聯第一目標。（<b style="color:var(--coral)">待顧問最終確認</b>）</td>
               </tr>
               <tr class="good-row">
                 <td><b>台電長安變電所 (長安 D/S)</b></td>
                 <td><b style="color:var(--blue)">約 7 km</b></td>
-                <td><b>次優備援 (Secondary)</b><br>距離適中，若南崁所饋線容量受限，可作為可靠的備援併聯節點。</td>
+                <td><b>次優備援 (Secondary)</b><br>若南崁所饋線容量受限，可作為可靠的備援併聯節點。（<b style="color:var(--coral)">待顧問最終確認</b>）</td>
               </tr>
               <tr class="bad-row">
                 <td><b>大園工業區變電所</b></td>
@@ -1333,6 +1364,67 @@ svg text{font-family:inherit}
     <div class="slide-foot">
       <div>來源：台電配電級與輸電級變電所地理資訊 ｜ 桃園基地 GIS 分析</div>
       <div class="pageno">2.6</div>
+    </div>
+  </section>
+
+  <!-- P2.7 -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="eyebrow">Part 2 · 個案背景 2.7</div>
+        <h1>資料中心可行性評估與設計顧問</h1>
+        <p class="sub">引進專業第三方技術顧問，專責 AIDC 場域選址評估、機電佈局與 PUE 能效設計，確保案場規格完全對齊國際 Colo 與 CSP 標準。</p>
+      </div>
+      <div class="flags">
+        <span class="flag blue">台灣字節橋 / 佰橋科技</span>
+        <span class="flag teal">第三方技術顧問</span>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="card" style="border-top-color:var(--blue); padding:32px">
+          <h2 style="font-size:1.6rem; margin-bottom:12px; color:var(--ink)">台灣字節橋有限公司<br><small style="font-size:1rem; color:var(--muted)">台灣佰橋科技股份有限公司</small></h2>
+          
+          <div style="margin-top:24px; display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="font-size:1.4rem">📍</span>
+              <div>
+                <strong style="display:block; color:var(--ink); font-size:0.9rem">總部地址</strong>
+                <span style="color:var(--muted); font-size:0.9rem">台北市信義區忠孝東路 5 段 1 之 1 號 13 樓</span>
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="font-size:1.4rem">🎯</span>
+              <div>
+                <strong style="display:block; color:var(--ink); font-size:0.9rem">專案服務範疇</strong>
+                <span style="color:var(--muted); font-size:0.9rem">資料中心選址評估 (Site Selection)、建築與機電初步設計 (Conceptual Design)、台電特高壓併聯規劃與能源能效驗證</span>
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="font-size:1.4rem">🌐</span>
+              <div>
+                <strong style="display:block; color:var(--ink); font-size:0.9rem">官方網站</strong>
+                <a href="https://www.bytebt.tw/data-center-design-and-installation/" target="_blank" style="color:var(--blue); font-size:0.9rem; text-decoration:none; font-weight:700">bytebt.tw/data-center-design-and-installation/</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card teal" style="padding:32px">
+           <h3 style="font-size:1.2rem; margin-bottom:16px;">顧問協同價值 (Consulting Value)</h3>
+           <ul style="color:var(--muted); line-height:1.8; font-size:0.95rem; padding-left:20px;">
+             <li style="margin-bottom:12px"><b>降低技術盲區風險：</b>以國際 Tier 3 / Tier 4 標準為準繩，避免因前期設計瑕疵導致後續客戶拒絕承租。</li>
+             <li style="margin-bottom:12px"><b>優化併聯決策：</b>協助我方與台電進行技術對接，驗證南崁 D/S 與長安 D/S 變電所真實併網容量。</li>
+             <li style="margin-bottom:12px"><b>PUE 精算與環保法規：</b>確保 40MW 滿載下液冷與乾冷器搭配，符合 PUE &lt; 1.15 及最新能源法規。</li>
+           </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <div>來源：台灣字節橋科技 ｜ 專案協力廠商名冊</div>
+      <div class="pageno">2.7</div>
     </div>
   </section>
 
@@ -1773,5 +1865,52 @@ document.querySelectorAll('.slide .table-wrap').forEach(function(wrap){
   wrap.appendChild(button);
 });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    if(!document.getElementById('aidc-map')) return;
+    var map = L.map('aidc-map').setView([25.075, 121.285], 13);
+    
+    // Use Google Maps tile layer for authentic Google Map look
+    L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3'],
+        attribution: '&copy; Google Maps'
+    }).addTo(map);
+
+    var baseIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--blue);color:#fff;padding:6px 10px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">📍 桃園蘆竹後壁基地<br><small style="font-weight:normal;opacity:0.9">1147地號 / 1.4公頃</small></div>', iconSize: [140, 50], iconAnchor: [70, 50]});
+    var nankanIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--green);color:#fff;padding:5px 8px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">⚡ 南崁 D/S (5km)</div>', iconSize: [120, 30], iconAnchor: [60, 30]});
+    var changanIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--teal);color:#fff;padding:5px 8px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">⚡ 長安 D/S (7km)</div>', iconSize: [120, 30], iconAnchor: [60, 30]});
+    
+    // Approximate coordinates
+    var baseLatLng = [25.0934, 121.2635];
+    var nankanLatLng = [25.0457, 121.2982];
+    var changanLatLng = [25.0645, 121.2831];
+
+    L.marker(baseLatLng, {icon: baseIcon}).addTo(map);
+    L.marker(nankanLatLng, {icon: nankanIcon}).addTo(map);
+    L.marker(changanLatLng, {icon: changanIcon}).addTo(map);
+
+    // Draw lines
+    L.polyline([baseLatLng, nankanLatLng], {color: 'var(--green)', weight: 4, dashArray: '6, 8'}).addTo(map);
+    L.polyline([baseLatLng, changanLatLng], {color: 'var(--teal)', weight: 4, dashArray: '6, 8'}).addTo(map);
+    
+    map.fitBounds([baseLatLng, nankanLatLng, changanLatLng], {padding: [60, 60]});
+    
+    // Fix map rendering issue when in hidden slide
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.classList.contains('active')) {
+                setTimeout(function(){ map.invalidateSize(); }, 200);
+            }
+        });
+    });
+    var viewP2 = document.getElementById('view-p2');
+    if(viewP2) {
+        observer.observe(viewP2, { attributes: true, attributeFilter: ['class'] });
+    }
+});
+</script>
 </body>
+
 </html>

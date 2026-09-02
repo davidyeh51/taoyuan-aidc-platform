@@ -1869,46 +1869,86 @@ document.querySelectorAll('.slide .table-wrap').forEach(function(wrap){
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     if(!document.getElementById('aidc-map')) return;
-    var map = L.map('aidc-map').setView([25.075, 121.285], 13);
-    
-    // Use Google Maps tile layer for authentic Google Map look
-    L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3'],
-        attribution: '&copy; Google Maps'
+
+    /* ── 初始化地圖 ── */
+    var map = L.map('aidc-map', {zoomControl: true, scrollWheelZoom: true}).setView([25.058, 121.270], 12);
+
+    /* OpenStreetMap 底圖 (穩定且免費) */
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    var baseIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--blue);color:#fff;padding:6px 10px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">📍 桃園蘆竹後壁基地<br><small style="font-weight:normal;opacity:0.9">1147地號 / 1.4公頃</small></div>', iconSize: [140, 50], iconAnchor: [70, 50]});
-    var nankanIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--green);color:#fff;padding:5px 8px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">⚡ 南崁 D/S (5km)</div>', iconSize: [120, 30], iconAnchor: [60, 30]});
-    var changanIcon = L.divIcon({className: 'custom-pin', html: '<div style="background:var(--teal);color:#fff;padding:5px 8px;border-radius:4px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,0.3);">⚡ 長安 D/S (7km)</div>', iconSize: [120, 30], iconAnchor: [60, 30]});
-    
-    // Approximate coordinates
-    var baseLatLng = [25.0934, 121.2635];
-    var nankanLatLng = [25.0457, 121.2982];
-    var changanLatLng = [25.0645, 121.2831];
+    /* ── 座標定義 ── */
+    // 桃園蘆竹後壁段 1147 地號 (坑子口 / 後壁厝一帶)
+    var baseLat = 25.0750, baseLng = 121.2750;
+    // 台電南崁變電所 (南崁 D/S) — 南崁地區
+    var nankanLat = 25.0380, nankanLng = 121.2920;
+    // 台電長安變電所 (長安 D/S) — 蘆竹區南工路一段20號
+    var changanLat = 25.0454, changanLng = 121.2860;
+    // 大園工業區 — 大園區中正東路一帶
+    var dayuanLat = 25.0550, dayuanLng = 121.2200;
 
-    L.marker(baseLatLng, {icon: baseIcon}).addTo(map);
-    L.marker(nankanLatLng, {icon: nankanIcon}).addTo(map);
-    L.marker(changanLatLng, {icon: changanIcon}).addTo(map);
+    var baseLatLng   = [baseLat, baseLng];
+    var nankanLatLng  = [nankanLat, nankanLng];
+    var changanLatLng = [changanLat, changanLng];
+    var dayuanLatLng  = [dayuanLat, dayuanLng];
 
-    // Draw lines
-    L.polyline([baseLatLng, nankanLatLng], {color: 'var(--green)', weight: 4, dashArray: '6, 8'}).addTo(map);
-    L.polyline([baseLatLng, changanLatLng], {color: 'var(--teal)', weight: 4, dashArray: '6, 8'}).addTo(map);
-    
-    map.fitBounds([baseLatLng, nankanLatLng, changanLatLng], {padding: [60, 60]});
-    
-    // Fix map rendering issue when in hidden slide
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.target.classList.contains('active')) {
-                setTimeout(function(){ map.invalidateSize(); }, 200);
-            }
+    /* ── 自訂圖標 ── */
+    function makeIcon(bg, label, sub) {
+        var h = '<div style="background:'+bg+';color:#fff;padding:6px 12px;border-radius:6px;font-weight:800;white-space:nowrap;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-size:13px;line-height:1.4;text-align:center;">'+label+(sub?'<br><small style="font-weight:600;opacity:0.9;font-size:11px;">'+sub+'</small>':'')+'</div>';
+        return L.divIcon({className:'custom-pin', html:h, iconSize:[180,50], iconAnchor:[90,50]});
+    }
+    var baseIcon    = makeIcon('#2563eb','📍 桃園蘆竹後壁基地','1147 地號 ｜ 1.4 公頃 ｜ 丁建');
+    var nankanIcon  = makeIcon('#16a34a','⚡ 台電南崁變電所 (南崁 D/S)','距離約 5 km — 首選');
+    var changanIcon = makeIcon('#0d9488','⚡ 台電長安變電所 (長安 D/S)','距離約 7 km — 備援');
+    var dayuanIcon  = makeIcon('#ef4444','⚠ 大園工業區','距離約 18 km — 不可行');
+
+    /* ── 標記 ── */
+    L.marker(baseLatLng,   {icon: baseIcon,    zIndexOffset: 1000}).addTo(map);
+    L.marker(nankanLatLng,  {icon: nankanIcon,  zIndexOffset: 900}).addTo(map);
+    L.marker(changanLatLng, {icon: changanIcon, zIndexOffset: 800}).addTo(map);
+    L.marker(dayuanLatLng,  {icon: dayuanIcon,  zIndexOffset: 700}).addTo(map);
+
+    /* ── 圓形範圍 (基地周圍 2km) ── */
+    L.circle(baseLatLng, {radius: 2000, color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.06, weight: 1.5, dashArray: '4,6'}).addTo(map);
+
+    /* ── 距離連線與標籤 ── */
+    function drawLine(from, to, color, label) {
+        L.polyline([from, to], {color: color, weight: 3.5, dashArray: '8,6', opacity: 0.85}).addTo(map);
+        var midLat = (from[0]+to[0])/2, midLng = (from[1]+to[1])/2;
+        var labelIcon = L.divIcon({
+            className: 'custom-pin',
+            html: '<div style="background:'+color+';color:#fff;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.3);border:1.5px solid rgba(255,255,255,0.8);">'+label+'</div>',
+            iconSize: [80,24], iconAnchor: [40,12]
+        });
+        L.marker([midLat, midLng], {icon: labelIcon, interactive: false}).addTo(map);
+    }
+    drawLine(baseLatLng, nankanLatLng,  '#16a34a', '≈ 5 km');
+    drawLine(baseLatLng, changanLatLng, '#0d9488', '≈ 7 km');
+    drawLine(baseLatLng, dayuanLatLng,  '#ef4444', '≈ 18 km');
+
+    /* ── 自動縮放至所有標記 ── */
+    map.fitBounds([baseLatLng, nankanLatLng, changanLatLng, dayuanLatLng], {padding: [50, 50]});
+
+    /* ── 修復隱藏 slide 的地圖渲染 ── */
+    function refreshMap() { setTimeout(function(){ map.invalidateSize(); }, 250); }
+    var obs = new MutationObserver(function(muts) {
+        muts.forEach(function(m) {
+            if (m.target && m.target.classList && m.target.classList.contains('active')) { refreshMap(); }
         });
     });
+    // 監聽 Part 2 view 與所有 slide 的 class 變化
     var viewP2 = document.getElementById('view-p2');
     if(viewP2) {
-        observer.observe(viewP2, { attributes: true, attributeFilter: ['class'] });
+        obs.observe(viewP2, {attributes:true, attributeFilter:['class']});
+        var slides = viewP2.querySelectorAll('.slide');
+        for(var i=0; i<slides.length; i++) {
+            obs.observe(slides[i], {attributes:true, attributeFilter:['class']});
+        }
     }
+    // 也在 hashchange 時重新整理
+    window.addEventListener('hashchange', refreshMap);
 });
 </script>
 </body>
